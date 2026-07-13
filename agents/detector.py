@@ -65,10 +65,18 @@ class Detector:
         ]
 
     def _run_xview3(self, tile) -> list[Detection]:
-        # prep-week TODO: earth-search STAC → Sentinel-1 GRD for tile.bbox →
-        # xView3 checkpoint inference → persist detections to data/.
-        _log(
-            f"detector[{tile.tile_id}]: xview3 live mode not wired yet — "
-            f"falling back to cached scenario"
-        )
-        return self._cached(tile)
+        # Live SAR detection backend (see agents/xview3_detector.py):
+        #   earth-search STAC → Sentinel-1 GRD for tile.bbox → xView3
+        #   checkpoint inference → detections cached to data/.
+        # Safety: any failure (no checkpoint wired, import/network error)
+        # falls back to the cached scenario, so the swarm never stalls —
+        # identical behavior to before until the checkpoint is configured.
+        try:
+            from .xview3_detector import run_xview3
+            return run_xview3(tile)
+        except Exception as exc:  # noqa: BLE001 - deliberate graceful fallback
+            _log(
+                f"detector[{tile.tile_id}]: xview3 live backend unavailable "
+                f"({exc}); falling back to cached scenario"
+            )
+            return self._cached(tile)
