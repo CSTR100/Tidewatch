@@ -1,0 +1,3 @@
+# Live AIS collection backend (Task 2). Install where mode="aisstream" runs.
+# Real-time only (no historical backfill); collects a bounded window and caches.
+websockets>=11.0
