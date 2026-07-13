@@ -1,6 +1,6 @@
 [
   {
-    "vessel_id": "V-8d0cb023",
+    "vessel_id": "V-30986a47",
     "detection": {
       "tile_id": "T11",
       "lat": 57.8,
@@ -14,6 +14,7 @@
     "ais_matched": true,
     "is_dark": false,
     "mmsi": "368112233",
+    "name": "\u6d51\u6c34\u6478\u9c7c\u53f7 (HUNSHUI MOYU)",
     "vessel_class": "fishing",
     "track": [
       {
@@ -93,7 +94,7 @@
     "rendezvous_with": null
   },
   {
-    "vessel_id": "V-552475df",
+    "vessel_id": "V-0683636e",
     "detection": {
       "tile_id": "T01",
       "lat": 56.7,
@@ -107,6 +108,7 @@
     "ais_matched": false,
     "is_dark": true,
     "mmsi": "273812345",
+    "name": "\u0411\u0410\u0411\u0410-\u042f\u0413\u0410 (BABA YAGA)",
     "vessel_class": "fishing",
     "track": [
       {
@@ -151,11 +153,11 @@
       "note": "cached fallback -- replace with live You.com API results when YDC_API_KEY is set"
     },
     "threat_score": 1.0,
-    "threat_narrative": "SUSPICIOUS (dark_while_detected, rendezvous_dark_pair, ais_gap_in_zone, loitering_in_mpa): 44.0 m fishing vessel detected by SAR at (56.70, -169.60) on 2026-07-12T18:00:00; zones: Pribilof Islands Habitat Conservation Area, US EEZ (Alaska); no AIS broadcast (dark) \u2014 probable identity MMSI 273812345; AIS silent 7.0 h since 2026-07-12T15:00:00 inside Pribilof Islands Habitat Conservation Area; loitering alongside V-d7813898 (pattern consistent with at-sea transshipment); open-web intel: Enforcement reporting documents distant-water trawlers shutting off AIS near the US EEZ boundary in the Bering Sea before transferring catch at sea.; open-web intel: Observers have flagged reefers loitering near the Pribilof Islands conservation area during the summer pollock season.. Recommend tasking follow-up collection and notifying enforcement.",
-    "rendezvous_with": "V-d7813898"
+    "threat_narrative": "SUSPICIOUS (dark_while_detected, rendezvous_dark_pair, ais_gap_in_zone, loitering_in_mpa): 44.0 m fishing vessel detected by SAR at (56.70, -169.60) on 2026-07-12T18:00:00; zones: Pribilof Islands Habitat Conservation Area, US EEZ (Alaska); no AIS broadcast (dark) \u2014 probable identity MMSI 273812345; AIS silent 7.0 h since 2026-07-12T15:00:00 inside Pribilof Islands Habitat Conservation Area; loitering alongside V-74f5a03c (pattern consistent with at-sea transshipment); open-web intel: Enforcement reporting documents distant-water trawlers shutting off AIS near the US EEZ boundary in the Bering Sea before transferring catch at sea.; open-web intel: Observers have flagged reefers loitering near the Pribilof Islands conservation area during the summer pollock season.. Recommend tasking follow-up collection and notifying enforcement.",
+    "rendezvous_with": "V-74f5a03c"
   },
   {
-    "vessel_id": "V-d7813898",
+    "vessel_id": "V-74f5a03c",
     "detection": {
       "tile_id": "T01",
       "lat": 56.705,
@@ -169,6 +171,7 @@
     "ais_matched": true,
     "is_dark": false,
     "mmsi": "511200345",
+    "name": "\u987a\u624b\u7275\u9c7c\u53f7 (SHUNSHOU QIANYU)",
     "vessel_class": "reefer",
     "track": [
       {
@@ -245,11 +248,11 @@
     ],
     "identity": null,
     "threat_score": 0.45,
-    "threat_narrative": "SUSPICIOUS (rendezvous_dark_pair, loitering_in_mpa): 140.0 m reefer vessel detected by SAR at (56.70, -169.59) on 2026-07-12T18:00:00; zones: Pribilof Islands Habitat Conservation Area, US EEZ (Alaska); loitering alongside V-552475df (pattern consistent with at-sea transshipment). Recommend tasking follow-up collection and notifying enforcement.",
-    "rendezvous_with": "V-552475df"
+    "threat_narrative": "SUSPICIOUS (rendezvous_dark_pair, loitering_in_mpa): 140.0 m reefer vessel detected by SAR at (56.70, -169.59) on 2026-07-12T18:00:00; zones: Pribilof Islands Habitat Conservation Area, US EEZ (Alaska); loitering alongside V-0683636e (pattern consistent with at-sea transshipment). Recommend tasking follow-up collection and notifying enforcement.",
+    "rendezvous_with": "V-0683636e"
   },
   {
-    "vessel_id": "V-9f38b0f1",
+    "vessel_id": "V-fe8a860d",
     "detection": {
       "tile_id": "T22",
       "lat": 58.14,
@@ -263,6 +266,7 @@
     "ais_matched": true,
     "is_dark": false,
     "mmsi": "367445566",
+    "name": "\u0410\u0412\u041e\u0421\u042c (AVOS')",
     "vessel_class": "fishing",
     "track": [
       {
@@ -343,7 +347,7 @@
     "rendezvous_with": null
   },
   {
-    "vessel_id": "V-55e066b6",
+    "vessel_id": "V-c7aafe88",
     "detection": {
       "tile_id": "T22",
       "lat": 59.3,
@@ -357,6 +361,7 @@
     "ais_matched": true,
     "is_dark": false,
     "mmsi": "636987654",
+    "name": null,
     "vessel_class": "tanker",
     "track": [
       {

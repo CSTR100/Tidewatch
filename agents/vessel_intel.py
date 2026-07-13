@@ -152,6 +152,7 @@ class VesselIntel:
             rec.ais_matched = True
             rec.is_dark = False
             rec.mmsi = tr["mmsi"]
+            rec.name = tr.get("name")
             assigned[rec.vessel_id] = tr
             taken_mmsi.add(tr["mmsi"])
             state.log(f"vessel-intel: {rec.vessel_id} ↔ MMSI {tr['mmsi']} ({d:.2f} km)")
@@ -228,6 +229,7 @@ class VesselIntel:
                 continue
             d, tr, lat, lon, ts, silent_h = best
             rec.mmsi = tr["mmsi"]
+            rec.name = tr.get("name")  # probable identity, via the gap
             rec.ais_gaps.append(AISGap(
                 start=ts,
                 end=watch_end.isoformat(),

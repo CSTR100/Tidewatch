@@ -110,6 +110,11 @@ _TEMPLATE = """<!DOCTYPE html>
   @keyframes pulse { 0% { r:9; opacity:.65; } 100% { r:26; opacity:0; } }
   .pulse { animation:pulse 2.4s ease-out infinite; }
   @media (prefers-reduced-motion:reduce) { .pulse { animation:none; opacity:.25; } }
+
+  .boat-label { background:rgba(251,252,253,.92); border:1px solid var(--line);
+                border-radius:5px; color:var(--ink); font:600 11px system-ui;
+                padding:1px 6px; box-shadow:none; }
+  .boat-label-dark { color:#b32f2f; border-color:#d03b3b; }
   footer { padding:14px 24px 28px; color:var(--muted); font-size:12.5px;
            text-align:center; }
   .pdf-btn { float:right; margin-top:-2px; font:600 13px system-ui;
@@ -197,13 +202,16 @@ recs.forEach(r => {
   if (r.track && r.track.length > 1)
     L.polyline(r.track.map(p => [p.lat, p.lon]), { color:c, weight:2,
       opacity:0.7 }).addTo(map);
-  L.circleMarker([r.detection.lat, r.detection.lon],
+  const marker = L.circleMarker([r.detection.lat, r.detection.lon],
     { radius: r.is_dark ? 9 : 6, color:c, fillColor:c, fillOpacity:0.85 })
-    .bindPopup("<b>" + r.vessel_id + "</b><br>" + r.vessel_class + " · " +
+    .bindPopup((r.name ? "<b>" + r.name + "</b><br>" : "") +
+      "<b>" + r.vessel_id + "</b><br>" + r.vessel_class + " · " +
       (r.detection.length_m || "?") + " m" +
       (r.is_dark ? "<br><b style='color:" + D.dark_color + "'>DARK</b>" : "") +
-      (r.mmsi ? "<br>MMSI " + r.mmsi : "") +
+      (r.mmsi ? "<br>MMSI " + r.mmsi + (r.is_dark ? " (probable)" : "") : "") +
       "<br>threat " + (r.threat_score ?? 0).toFixed(2)).addTo(map);
+  if (r.name) marker.bindTooltip(r.name, { permanent:true, direction:"top",
+    offset:[0,-9], className:"boat-label" + (r.is_dark ? " boat-label-dark" : "") });
 });
 
 document.getElementById("legend").innerHTML =
@@ -265,14 +273,14 @@ document.getElementById("legend").innerHTML =
   s += `<circle cx="${X(pp.ex)}" cy="${Y(pp.ey)}" r="7"
         fill="${D.class_colors[partner.vessel_class] || '#eda100'}"/>
         <text x="${X(pp.ex)}" y="${Y(pp.ey)-12}" font-size="11" text-anchor="middle"
-        fill="#16232e">${partner.vessel_class} · ${partner.detection.length_m} m · MMSI ${partner.mmsi || "?"}</text>`;
+        fill="#16232e">${partner.name || partner.vessel_class} · ${partner.detection.length_m} m · MMSI ${partner.mmsi || "?"}</text>`;
   // dark contact: pulsing diamond
   s += `<circle class="pulse" cx="${X(pd.ex)}" cy="${Y(pd.ey)}" r="9"
         fill="none" stroke="${D.dark_color}" stroke-width="2"/>
         <rect x="${X(pd.ex)-6}" y="${Y(pd.ey)-6}" width="12" height="12"
         transform="rotate(45 ${X(pd.ex)} ${Y(pd.ey)})" fill="${D.dark_color}"/>
         <text x="${X(pd.ex)}" y="${Y(pd.ey)+24}" font-size="11" font-weight="700"
-        text-anchor="middle" fill="${D.dark_color}">DARK · ${dark.detection.length_m} m ${dark.vessel_class}</text>`;
+        text-anchor="middle" fill="${D.dark_color}">DARK · ${dark.detection.length_m} m ${dark.vessel_class}${dark.name ? " · prob. " + dark.name : ""}</text>`;
   document.getElementById("inset").innerHTML = s;
   document.getElementById("rdv-note").innerHTML =
     `The <b>${dark.detection.length_m} m dark hull</b> loiters <b>${dDark.toFixed(1)} km</b> ` +
@@ -289,7 +297,9 @@ document.getElementById("dossiers").innerHTML = recs.map(r => {
     "AIS silent " + g.duration_hours + " h from " + g.start +
     (g.inside_zone ? " inside " + g.inside_zone : "")).join(" · ");
   return "<div class='card" + (r.is_dark ? " dark-vessel" : "") + "'>" +
-    "<div class='row'><span><span class='vid'>" + r.vessel_id + "</span> — " +
+    "<div class='row'><span>" +
+    (r.name ? "<b>" + r.name + "</b> — " : "") +
+    "<span class='vid'>" + r.vessel_id + "</span> — " +
     r.vessel_class + " · " + (r.detection.length_m || "?") + " m" +
     (r.mmsi ? " · MMSI " + r.mmsi + (r.is_dark ? " (probable)" : "") : "") +
     "</span>" + (r.is_dark ? "<span class='badge'>DARK</span>" : "") + "</div>" +

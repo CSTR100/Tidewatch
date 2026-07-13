@@ -101,15 +101,21 @@ CACHED_AIS = {
     ],
     "bering_alaska": [
         # reefer loitering by the Pribilofs (flag of convenience)
-        {"mmsi": "511200345", "points": _hourly(56.705, -169.59, 0.0, 0.0005, 12, 11, day="2026-07-12")},
+        # (names from presentation_fun/boatnames.txt — the demo villains)
+        {"mmsi": "511200345", "name": "顺手牵鱼号 (SHUNSHOU QIANYU)",
+         "points": _hourly(56.705, -169.59, 0.0, 0.0005, 12, 11, day="2026-07-12")},
         # crabber working the shelf
-        {"mmsi": "368112233", "points": _hourly(57.8, -166.03, 0.0, 0.005, 12, 11, day="2026-07-12")},
+        {"mmsi": "368112233", "name": "浑水摸鱼号 (HUNSHUI MOYU)",
+         "points": _hourly(57.8, -166.03, 0.0, 0.005, 12, 11, day="2026-07-12")},
         # trawler off Marmot Island (Kodiak)
-        {"mmsi": "367445566", "points": _hourly(58.17, -151.90, -0.005, 0.0, 12, 11, day="2026-07-12")},
+        {"mmsi": "367445566", "name": "АВОСЬ (AVOS')",
+         "points": _hourly(58.17, -151.90, -0.005, 0.0, 12, 11, day="2026-07-12")},
         # tanker northeast-bound across the Gulf
-        {"mmsi": "636987654", "points": _hourly(59.0, -146.1, 0.05, 0.1, 12, 11, day="2026-07-12")},
+        {"mmsi": "636987654",
+         "points": _hourly(59.0, -146.1, 0.05, 0.1, 12, 11, day="2026-07-12")},
         # goes dark at 15:00 inside the Pribilof HCA, 1.3 km from the dark hull
-        {"mmsi": "273812345", "points": _hourly(56.72, -169.72, -0.005, 0.02, 10, 6, day="2026-07-12")},
+        {"mmsi": "273812345", "name": "БАБА-ЯГА (BABA YAGA)",
+         "points": _hourly(56.72, -169.72, -0.005, 0.02, 10, 6, day="2026-07-12")},
     ],
 }
 
