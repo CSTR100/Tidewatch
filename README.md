@@ -7,9 +7,16 @@ handoff that Person B's Analyst + Reporter consume.
 
 ```bash
 python run_pipeline.py                          # IUU fishing demo (cached)
-python run_pipeline.py --profile conflict_zone  # Hormuz mission (needs its cached scenario)
+python run_pipeline.py --profile conflict_zone  # Hormuz mission
+python run_pipeline.py --profile bering_alaska  # Bering Sea / Gulf of Alaska mission
 YDC_API_KEY=... python run_pipeline.py          # live You.com enrichment
+TAVILY_API_KEY=... python run_pipeline.py       # live Tavily enrichment (alternate)
 ```
+
+Open-web enrichment tries You.com first, then Tavily, then the cached
+fallback — set whichever key you have; never commit keys. `.mcp.json` also
+registers the Tavily MCP server for Claude Code sessions in this repo
+(reads `TAVILY_API_KEY` from the environment).
 
 ## What the demo run shows
 

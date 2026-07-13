@@ -27,6 +27,7 @@ def _hourly(base_lat, base_lon, dlat, dlon, start_hour, n, day="2026-07-10"):
 SCENE_TIMES = {
     "iuu_fishing": "2026-07-10T10:00:00",
     "conflict_zone": "2026-07-10T09:00:00",
+    "bering_alaska": "2026-07-12T18:00:00",
 }
 
 # --------------------------------------------------------------------------
@@ -56,6 +57,22 @@ CACHED_CONTACTS = {
         # sea-state clutter
         dict(lat=24.3, lon=55.4, confidence=0.22, length_m=7.0),
     ],
+    "bering_alaska": [
+        # the dark hull — no AIS, loitering inside the Pribilof HCA
+        dict(lat=56.6, lon=-169.6, confidence=0.93, length_m=44.0),
+        # the reefer 800 m away — the transshipment partner
+        dict(lat=56.605, lon=-169.59, confidence=0.97, length_m=140.0),
+        # broadcasting crabber on the Bering shelf
+        dict(lat=57.8, lon=-166.0, confidence=0.90, length_m=38.0),
+        # broadcasting trawler in the Kodiak SSL protection area
+        dict(lat=57.4, lon=-152.3, confidence=0.92, length_m=52.0),
+        # tanker transiting the Gulf of Alaska
+        dict(lat=59.3, lon=-145.5, confidence=0.95, length_m=183.0),
+        # sea-state clutter (Aleutian swell)
+        dict(lat=52.4, lon=-175.0, confidence=0.28, length_m=8.0),
+        # clutter near Shelikof Strait
+        dict(lat=58.9, lon=-155.9, confidence=0.41, length_m=11.0),
+    ],
 }
 
 # --------------------------------------------------------------------------
@@ -77,6 +94,18 @@ CACHED_AIS = {
         {"mmsi": "636999777", "points": _hourly(26.4, 56.6, 0.0, 0.1, 5, 8)},
         # goes dark at 03:00 inside the STS watch box
         {"mmsi": "572333111", "points": _hourly(25.25, 56.28, 0.0, -0.01, 0, 4)},
+    ],
+    "bering_alaska": [
+        # reefer loitering by the Pribilofs (flag of convenience)
+        {"mmsi": "511200345", "points": _hourly(56.605, -169.59, 0.0, 0.0005, 12, 11, day="2026-07-12")},
+        # crabber working the shelf
+        {"mmsi": "368112233", "points": _hourly(57.8, -166.03, 0.0, 0.005, 12, 11, day="2026-07-12")},
+        # trawler off Kodiak
+        {"mmsi": "367445566", "points": _hourly(57.43, -152.3, -0.005, 0.0, 12, 11, day="2026-07-12")},
+        # tanker northeast-bound across the Gulf
+        {"mmsi": "636987654", "points": _hourly(59.0, -146.1, 0.05, 0.1, 12, 11, day="2026-07-12")},
+        # goes dark at 15:00 inside the Pribilof HCA, 1.3 km from the dark hull
+        {"mmsi": "273812345", "points": _hourly(56.62, -169.72, -0.005, 0.02, 10, 6, day="2026-07-12")},
     ],
 }
 
@@ -117,6 +146,24 @@ CACHED_ENRICHMENT = {
             {
                 "title": "AIS manipulation in conflict corridors",
                 "url": "https://example.org/ais-manipulation-study",
+            },
+        ],
+        "note": "cached fallback -- replace with live You.com API results when YDC_API_KEY is set",
+    },
+    "bering_alaska": {
+        "summary_snippets": [
+            "Enforcement reporting documents distant-water trawlers shutting off AIS near the US EEZ boundary in the Bering Sea before transferring catch at sea.",
+            "Observers have flagged reefers loitering near the Pribilof Islands conservation area during the summer pollock season.",
+            "Vessels associated with this fleet have prior port-state citations for unreported transshipment in the North Pacific.",
+        ],
+        "citations": [
+            {
+                "title": "Dark fleet pressure along the Bering Sea Convention Line (watch brief)",
+                "url": "https://example.org/bering-convention-line-brief",
+            },
+            {
+                "title": "At-sea transshipment in the North Pacific (fisheries intelligence review)",
+                "url": "https://example.org/north-pacific-transshipment",
             },
         ],
         "note": "cached fallback -- replace with live You.com API results when YDC_API_KEY is set",
