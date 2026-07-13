@@ -1,0 +1,4 @@
+# SAM mask extraction (Task 5, stretch). Install on the GPU box only.
+segment-anything>=1.0
+torch>=1.9
+rasterio>=1.4
