@@ -20,8 +20,10 @@ class Zone:
     name: str
     kind: str                    # "MPA" | "EEZ" | "corridor" | "sanction_zone"
     bbox: tuple[float, float, float, float]  # (min_lon, min_lat, max_lon, max_lat)
-    # bbox for hackathon speed; swap for real polygons (Marine Regions / WDPA
-    # shapefiles via shapely) without touching agent code.
+    # Real boundary (Task 3): optional shapely geometry. When present, zone
+    # containment uses precise point-in-polygon; bbox stays as a coarse
+    # fallback (and prefilter) so nothing breaks if a polygon is unavailable.
+    polygon: object = None       # shapely geometry or None
 
 
 @dataclass
@@ -110,3 +112,34 @@ BERING_ALASKA = WatchProfile(
 )
 
 PROFILES = {p.profile_id: p for p in (IUU_FISHING, CONFLICT_ZONE, BERING_ALASKA)}
+
+
+def hydrate_real_zones(profile: "WatchProfile", eez_region: str = "us_alaska",
+                       mpa_geojson: str | None = None) -> "WatchProfile":
+    """Attach real EEZ/MPA polygons to a profile's zones in place (Task 3).
+
+    - EEZ zones get the live Marine Regions polygon for `eez_region`.
+    - MPA zones get matching polygons from a local GeoJSON (data/mpa_*.geojson)
+      when available; otherwise they keep their bbox fallback.
+    Safe to call unconditionally: any load failure leaves the bbox in place, so
+    zone stamping still works offline.
+    """
+    try:
+        from agents.zones_loader import load_eez_polygon, load_mpa_polygons
+    except Exception:
+        from zones_loader import load_eez_polygon, load_mpa_polygons  # flat import
+    try:
+        eez_poly = load_eez_polygon(eez_region)
+    except Exception:
+        eez_poly = None
+    mpas = {}
+    try:
+        mpas = load_mpa_polygons(mpa_geojson)
+    except Exception:
+        mpas = {}
+    for z in profile.zones:
+        if z.kind == "EEZ" and eez_poly is not None:
+            z.polygon = eez_poly
+        elif z.kind == "MPA" and z.name in mpas:
+            z.polygon = mpas[z.name]
+    return profile
