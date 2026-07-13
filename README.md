@@ -64,8 +64,10 @@ Person A:
       cache the detections.
 - [ ] `VesselIntel._collect_aisstream`: AISstream.io WebSocket subscription
       for the bbox; persist buffers to `data/`.
-- [ ] Replace bbox zones with real polygons (Marine Regions EEZ + WDPA MPA
-      shapefiles, shapely `contains`).
+- [x] Replace bbox zones with real polygons (Marine Regions EEZ + NOAA Alaska
+      habitat-restriction MPAs, shapely `contains`; both keyless, fetched once
+      and cached to `data/`). Protected Planet's API is deprecated — NOAA's
+      ArcGIS service is the MPA source now.
 - [ ] Build the `conflict_zone` cached scenario (mirror the fishing one).
 - [ ] (Stretch) SAM mask extraction per detection → `mask_ref`.
 

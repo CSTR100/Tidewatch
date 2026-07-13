@@ -8,10 +8,12 @@ inside a bounding box.
 Data sources (both vessel-focused, public):
   * EEZ  — Marine Regions gazetteer (marineregions.org), no API key.
            US EEZ (Alaska) = MRGID 8463. Fetched live as WKT MULTIPOLYGON.
-  * MPA  — WDPA / Protected Planet. The polygon API requires a free token
-           (PROTECTED_PLANET_TOKEN). Because that needs a key, MPAs are
-           loaded from a local GeoJSON the team drops in (data/mpa_*.geojson),
-           and a documented fetch helper is provided for when the token exists.
+  * MPA  — NOAA Alaska Region's public ArcGIS habitat-restrictions service,
+           no API key. The Pribilof Islands HCA and the Steller sea lion 3 nm
+           no-transit zones are fetched as GeoJSON and cached to
+           data/mpa_alaska.geojson (fetch_noaa_mpas). A hand-supplied GeoJSON
+           at that path also works. (Protected Planet's API is deprecated in
+           favor of bulk shapefile downloads, so it is no longer the MPA path.)
 
 Design: keeps profiles.py's Zone contract intact but lets a Zone carry an
 optional shapely geometry. Point-in-polygon is used when a real polygon is
@@ -75,11 +77,15 @@ def load_eez_polygon(region_key: str = "us_alaska", use_cache: bool = True):
 
 def load_mpa_polygons(geojson_path: Optional[str] = None) -> dict:
     """Load MPA polygons from a local GeoJSON (FeatureCollection). Returns
-    {name: shapely geometry}. WDPA/Protected Planet needs a token, so the team
-    supplies the file; see fetch_wdpa_mpas for the keyed fetch path."""
+    {name: shapely geometry}. If the file is missing, fetches it from NOAA's
+    public service first (see fetch_noaa_mpas) — mirroring load_eez_polygon's
+    fetch-once-then-cache behavior."""
     path = geojson_path or os.path.join(DATA_DIR, "mpa_alaska.geojson")
     if not os.path.exists(path):
-        return {}
+        try:
+            path = fetch_noaa_mpas(out_path=geojson_path)
+        except Exception:
+            return {}
     with open(path) as f:
         fc = json.load(f)
     out = {}
@@ -90,32 +96,40 @@ def load_mpa_polygons(geojson_path: Optional[str] = None) -> dict:
     return out
 
 
-def fetch_wdpa_mpas(iso3: str = "USA", out_path: Optional[str] = None) -> str:
-    """Fetch marine protected areas from Protected Planet (needs
-    PROTECTED_PLANET_TOKEN) and write a GeoJSON FeatureCollection. Documented
-    path for the GPU/keyed box; not called automatically."""
-    token = os.environ.get("PROTECTED_PLANET_TOKEN")
-    if not token:
-        raise RuntimeError(
-            "PROTECTED_PLANET_TOKEN not set. Request a free token at "
-            "api.protectedplanet.net to fetch WDPA MPA polygons, or drop a "
-            "GeoJSON at data/mpa_alaska.geojson instead."
-        )
+NOAA_AKRO_HABITAT = ("https://alaskafisheries.noaa.gov/arcgis/rest/services/"
+                     "Steller_Sea_Lion_wOther_Management/MapServer/4/query")
+# The Kodiak-area window the bering_alaska profile's SSL zone covers.
+KODIAK_BBOX = (-156.0, 56.0, -150.5, 59.0)
+
+
+def fetch_noaa_mpas(out_path: Optional[str] = None) -> str:
+    """Fetch the bering_alaska MPA polygons from NOAA Alaska Region's public
+    ArcGIS habitat-restrictions service (no API key) and write a GeoJSON
+    FeatureCollection whose feature names match the profile's zone names.
+    (Protected Planet's WDPA API is deprecated in favor of bulk shapefile
+    downloads; NOAA is the authoritative keyless source for these zones.)"""
+    from shapely.geometry import box
+    from shapely.ops import unary_union
+
+    def _layer_union(htm: str):
+        qs = urllib.parse.urlencode({
+            "where": f"HTM='{htm}'", "outFields": "OBJECTID",
+            "returnGeometry": "true", "outSR": "4326", "f": "geojson",
+        })
+        fc = json.loads(_get(f"{NOAA_AKRO_HABITAT}?{qs}").decode())
+        return unary_union([shape(f["geometry"]) for f in fc["features"]])
+
+    prib = _layer_union("Prib_Hab_Cons_Area.htm")
+    # SSL protection = 3 nm no-transit zones around rookeries, statewide;
+    # clip to the Kodiak window the profile's zone describes.
+    ssl_kodiak = _layer_union("3nm_No_Transit.htm").intersection(box(*KODIAK_BBOX))
+    feats = [
+        {"type": "Feature", "geometry": prib.__geo_interface__,
+         "properties": {"name": "Pribilof Islands Habitat Conservation Area"}},
+        {"type": "Feature", "geometry": ssl_kodiak.__geo_interface__,
+         "properties": {"name": "Steller sea lion protection area (Kodiak)"}},
+    ]
     out_path = out_path or os.path.join(DATA_DIR, "mpa_alaska.geojson")
-    feats, page = [], 1
-    while True:
-        url = (f"https://api.protectedplanet.net/v3/protected_areas/search?"
-               f"country={iso3}&marine=true&with_geometry=true&per_page=50&page={page}&token={token}")
-        data = json.loads(_get(url).decode())
-        pas = data.get("protected_areas", [])
-        if not pas:
-            break
-        for pa in pas:
-            if pa.get("geojson"):
-                feats.append({"type": "Feature",
-                              "geometry": pa["geojson"]["geometry"],
-                              "properties": {"name": pa.get("name")}})
-        page += 1
     os.makedirs(DATA_DIR, exist_ok=True)
     with open(out_path, "w") as f:
         json.dump({"type": "FeatureCollection", "features": feats}, f)
