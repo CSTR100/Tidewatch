@@ -84,4 +84,29 @@ CONFLICT_ZONE = WatchProfile(
     min_gap_hours=6.0,
 )
 
-PROFILES = {p.profile_id: p for p in (IUU_FISHING, CONFLICT_ZONE)}
+# ---------------------------------------------------------------------------
+# Profile 3: IUU fishing in the North Pacific — Bering Sea & Gulf of Alaska.
+# Dark trawlers working conservation areas near the Pribilofs and Kodiak, with
+# at-sea transshipment to reefers; distant-water fleet pressure along the US
+# EEZ / Convention Line. Same fishing+reefer pairing as the Peru mission.
+# ---------------------------------------------------------------------------
+BERING_ALASKA = WatchProfile(
+    profile_id="bering_alaska",
+    description="IUU fishing & transshipment watch: Bering Sea & Gulf of Alaska (dark trawlers near conservation areas)",
+    region_bbox=(-180.0, 50.0, -141.0, 62.0),
+    zones=[
+        Zone("US EEZ (Alaska)", "EEZ", (-180.0, 48.0, -130.0, 65.0)),
+        Zone("Pribilof Islands Habitat Conservation Area", "MPA", (-172.0, 55.5, -168.0, 58.0)),
+        Zone("Steller sea lion protection area (Kodiak)", "MPA", (-156.0, 56.0, -150.5, 59.0)),
+    ],
+    suspicious_behaviors=[
+        "dark_while_detected",
+        "ais_gap_in_zone",
+        "rendezvous_dark_pair",
+        "loitering_in_mpa",
+    ],
+    pair_classes=("fishing", "reefer"),
+    min_gap_hours=3.0,
+)
+
+PROFILES = {p.profile_id: p for p in (IUU_FISHING, CONFLICT_ZONE, BERING_ALASKA)}

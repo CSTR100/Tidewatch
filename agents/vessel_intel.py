@@ -27,6 +27,7 @@ from profiles import WatchProfile, Zone
 from .cached_scenarios import CACHED_AIS, CACHED_ENRICHMENT
 
 MATCH_RADIUS_KM = 3.0    # AIS fix must be this close at scene time to match
+MATCH_MAX_STALE_H = 1.0  # ...and this fresh; a silent track can't claim a hull
 ORPHAN_RADIUS_KM = 15.0  # dark contact ↔ silent track correlation radius
 YDC_ENDPOINT = "https://api.ydc-index.io/search"
 
@@ -109,10 +110,13 @@ class VesselIntel:
         for rec in state.all():
             det_t = _parse(rec.detection.timestamp)
             for tr in tracks:
-                lat, lon, _ = min(
+                lat, lon, ts = min(
                     tr["points"],
                     key=lambda p: abs((_parse(p[2]) - det_t).total_seconds()),
                 )
+                stale_h = abs((_parse(ts) - det_t).total_seconds()) / 3600
+                if stale_h > MATCH_MAX_STALE_H:
+                    continue  # track wasn't broadcasting at scene time
                 d = _haversine_km(rec.detection.lat, rec.detection.lon, lat, lon)
                 if d <= MATCH_RADIUS_KM:
                     candidates.append((d, rec, tr))

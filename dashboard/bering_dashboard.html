@@ -1,0 +1,979 @@
+<title>Tidewatch — Bering Sea &amp; Gulf of Alaska</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --page: #edf1f4;
+    --surface: #fbfcfd;
+    --surface-2: #f2f6f8;
+    --ink: #16232e;
+    --ink-2: #4c5f6e;
+    --muted: #7c8b98;
+    --hairline: #dae2e8;
+    --grid: #e4eaee;
+    --land: #c3d1db;
+    --land-edge: #a9bbc8;
+    --accent: #2e7f93;
+    --accent-ink: #22677a;
+    --zone: rgba(46, 127, 147, 0.09);
+    --zone-edge: rgba(46, 127, 147, 0.55);
+    --fishing: #2a78d6;
+    --reefer: #eda100;
+    --tanker: #4a3aa7;
+    --critical: #d03b3b;
+    --critical-ink: #b32f2f;
+    --good-ink: #006300;
+    --warn: #b97c00;
+    --warn-ink: #8a6100;
+    --shadow: 0 1px 2px rgba(22, 35, 46, 0.05), 0 4px 14px rgba(22, 35, 46, 0.05);
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Mono", "Segoe UI Mono", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page: #0a121a;
+      --surface: #101923;
+      --surface-2: #15202c;
+      --ink: #e6edf3;
+      --ink-2: #9dafbd;
+      --muted: #64778a;
+      --hairline: #223140;
+      --grid: #1a2836;
+      --land: #1e2d3a;
+      --land-edge: #33475a;
+      --accent: #56a9bd;
+      --accent-ink: #74bccd;
+      --zone: rgba(86, 169, 189, 0.10);
+      --zone-edge: rgba(86, 169, 189, 0.50);
+      --fishing: #3987e5;
+      --reefer: #c98500;
+      --tanker: #9085e9;
+      --critical: #e05252;
+      --critical-ink: #e57272;
+      --good-ink: #35b535;
+      --warn: #fab219;
+      --warn-ink: #d99f2b;
+      --shadow: none;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page: #0a121a;
+    --surface: #101923;
+    --surface-2: #15202c;
+    --ink: #e6edf3;
+    --ink-2: #9dafbd;
+    --muted: #64778a;
+    --hairline: #223140;
+    --grid: #1a2836;
+    --land: #1e2d3a;
+    --land-edge: #33475a;
+    --accent: #56a9bd;
+    --accent-ink: #74bccd;
+    --zone: rgba(86, 169, 189, 0.10);
+    --zone-edge: rgba(86, 169, 189, 0.50);
+    --fishing: #3987e5;
+    --reefer: #c98500;
+    --tanker: #9085e9;
+    --critical: #e05252;
+    --critical-ink: #e57272;
+    --good-ink: #35b535;
+    --warn: #fab219;
+    --warn-ink: #d99f2b;
+    --shadow: none;
+  }
+  :root[data-theme="light"] {
+    --page: #edf1f4;
+    --surface: #fbfcfd;
+    --surface-2: #f2f6f8;
+    --ink: #16232e;
+    --ink-2: #4c5f6e;
+    --muted: #7c8b98;
+    --hairline: #dae2e8;
+    --grid: #e4eaee;
+    --land: #c3d1db;
+    --land-edge: #a9bbc8;
+    --accent: #2e7f93;
+    --accent-ink: #22677a;
+    --zone: rgba(46, 127, 147, 0.09);
+    --zone-edge: rgba(46, 127, 147, 0.55);
+    --fishing: #2a78d6;
+    --reefer: #eda100;
+    --tanker: #4a3aa7;
+    --critical: #d03b3b;
+    --critical-ink: #b32f2f;
+    --good-ink: #006300;
+    --warn: #b97c00;
+    --warn-ink: #8a6100;
+    --shadow: 0 1px 2px rgba(22, 35, 46, 0.05), 0 4px 14px rgba(22, 35, 46, 0.05);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--page);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1220px; margin: 0 auto; padding: 28px 24px 48px; }
+
+  /* ---------- header ---------- */
+  .masthead {
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 18px;
+    padding-bottom: 14px; border-bottom: 2px solid var(--accent);
+    margin-bottom: 8px;
+  }
+  .wordmark {
+    font-family: var(--mono); font-size: 22px; font-weight: 700;
+    letter-spacing: 0.14em; margin: 0;
+  }
+  .wordmark .tw-dot { color: var(--accent-ink); }
+  .mission { font-size: 14px; color: var(--ink-2); flex: 1 1 320px; min-width: 260px; }
+  .meta-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--ink-2);
+    border: 1px solid var(--hairline); border-radius: 3px;
+    padding: 3px 8px; background: var(--surface);
+    white-space: nowrap;
+  }
+  .chip strong { color: var(--ink); font-weight: 600; }
+  .subhead {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted); margin: 0 0 22px;
+  }
+
+  /* ---------- KPI tiles ---------- */
+  .kpis {
+    display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px;
+    margin-bottom: 14px;
+  }
+  @media (max-width: 900px) { .kpis { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 520px) { .kpis { grid-template-columns: repeat(2, 1fr); } }
+  .kpi {
+    background: var(--surface); border: 1px solid var(--hairline);
+    border-radius: 6px; padding: 12px 14px 10px; box-shadow: var(--shadow);
+  }
+  .kpi .k-label {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted); display: block;
+  }
+  .kpi .k-value { font-size: 30px; font-weight: 650; line-height: 1.15; letter-spacing: -0.01em; }
+  .kpi .k-note { font-size: 11.5px; color: var(--ink-2); }
+  .kpi-critical { border-color: var(--critical); border-width: 1.5px; }
+  .kpi-critical .k-value { color: var(--critical-ink); }
+  .k-glyph { font-size: 16px; vertical-align: 2px; }
+
+  /* ---------- cards & grid ---------- */
+  .row { display: grid; gap: 14px; margin-bottom: 14px; }
+  .row-map { grid-template-columns: minmax(0, 1fr) 372px; align-items: stretch; }
+  .row-intel { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); align-items: start; }
+  @media (max-width: 980px) { .row-map, .row-intel { grid-template-columns: 1fr; } }
+  .card {
+    background: var(--surface); border: 1px solid var(--hairline);
+    border-radius: 6px; box-shadow: var(--shadow); min-width: 0;
+  }
+  .card-head {
+    display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+    padding: 12px 16px 0;
+  }
+  .card-title {
+    font-size: 13px; font-weight: 650; margin: 0;
+    letter-spacing: 0.01em;
+  }
+  .card-eyebrow {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--accent-ink); font-weight: 600;
+  }
+  .card-sub { font-size: 11.5px; color: var(--muted); }
+  .card-body { padding: 10px 16px 14px; }
+
+  /* ---------- map ---------- */
+  .map-body { padding: 6px 10px 10px; }
+  .map-svg { width: 100%; height: auto; display: block; }
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: center;
+    padding: 8px 16px 12px; border-top: 1px solid var(--hairline);
+    font-size: 11.5px; color: var(--ink-2);
+  }
+  .lg { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+  .sw { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; }
+  .sw-line { width: 16px; height: 0; border-top: 2px dashed var(--warn); display: inline-block; }
+  .sw-diamond {
+    width: 9px; height: 9px; background: var(--critical);
+    transform: rotate(45deg); display: inline-block; flex: none;
+  }
+  .sw-zone { width: 12px; height: 10px; background: var(--zone); border: 1px dashed var(--zone-edge); display: inline-block; flex: none; }
+  .sw-x { font-family: var(--mono); color: var(--muted); font-size: 12px; line-height: 1; }
+
+  /* ---------- inset ---------- */
+  .inset-note { font-size: 12px; color: var(--ink-2); margin: 8px 0 0; }
+  .zone-chip {
+    display: inline-block; font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--accent-ink); background: var(--zone);
+    border: 1px solid var(--zone-edge); border-radius: 3px; padding: 2px 7px;
+  }
+
+  /* ---------- dossier ---------- */
+  .dossier { border-left: 4px solid var(--critical); }
+  .d-status {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--critical-ink); font-weight: 700;
+  }
+  .d-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px 18px; margin: 10px 0 4px;
+  }
+  .d-field .f-label {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted); display: block;
+  }
+  .d-field .f-value { font-size: 14px; font-weight: 600; }
+  .d-field .f-value.mono { font-family: var(--mono); font-weight: 500; font-size: 13px; }
+  .d-section {
+    margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--hairline);
+  }
+  .d-section h4 {
+    margin: 0 0 6px; font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+    font-weight: 600;
+  }
+  .d-section p { margin: 0 0 6px; font-size: 13px; color: var(--ink-2); max-width: 62ch; }
+  .snips { margin: 0; padding-left: 18px; }
+  .snips li { font-size: 13px; color: var(--ink-2); margin-bottom: 5px; max-width: 62ch; }
+  .cites { margin: 4px 0 0; padding: 0; list-style: none; }
+  .cites li { font-size: 12px; margin-bottom: 3px; }
+  .cites a { color: var(--accent-ink); text-decoration: none; border-bottom: 1px solid var(--hairline); }
+  .cites a:hover, .cites a:focus-visible { border-bottom-color: var(--accent-ink); }
+  .fallback-note {
+    display: inline-block; font-size: 11px; color: var(--warn-ink);
+    border: 1px dashed var(--warn); border-radius: 3px; padding: 1px 7px;
+    margin-top: 6px;
+  }
+
+  /* ---------- agent rail ---------- */
+  .agent-rail { display: grid; gap: 14px; }
+  .agent-num {
+    font-family: var(--mono); font-size: 10px; color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+  .mini-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px;
+    max-width: 220px; margin-top: 8px;
+  }
+  .mg-tile {
+    aspect-ratio: 2.1; border: 1px solid var(--hairline); border-radius: 3px;
+    background: var(--surface-2); position: relative;
+    font-family: var(--mono); font-size: 9px; color: var(--muted);
+    padding: 2px 4px;
+  }
+  .mg-tile .mg-n {
+    position: absolute; right: 5px; bottom: 2px; font-size: 12px;
+    font-weight: 700; color: var(--ink);
+  }
+  .mg-hit { border-color: var(--accent); background: var(--zone); }
+  .mg-clutter .mg-n { color: var(--muted); font-weight: 500; }
+  .agent-note { font-size: 12px; color: var(--ink-2); margin: 8px 0 0; max-width: 52ch; }
+  .agent-note strong { color: var(--ink); font-weight: 600; }
+
+  /* confidence chart */
+  .confbars { margin-top: 6px; }
+  .cb-row { display: grid; grid-template-columns: 118px 1fr 40px; gap: 8px; align-items: center; margin-bottom: 5px; }
+  .cb-label { font-family: var(--mono); font-size: 10.5px; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cb-track { position: relative; height: 6px; background: var(--surface-2); border-radius: 3px; }
+  .cb-fill { position: absolute; inset: 0 auto 0 0; border-radius: 3px; background: var(--fishing); }
+  .cb-drop .cb-fill { background: var(--muted); opacity: 0.55; }
+  .cb-drop .cb-label, .cb-drop .cb-val { color: var(--muted); }
+  .cb-val { font-family: var(--mono); font-size: 10.5px; color: var(--ink-2); text-align: right; font-variant-numeric: tabular-nums; }
+  .cb-axis { position: relative; height: 14px; margin-left: 126px; margin-right: 48px; }
+  .cb-thresh {
+    position: absolute; top: -136px; bottom: 14px; left: 50%;
+    border-left: 1.5px dashed var(--muted); pointer-events: none;
+  }
+  .cb-thresh-label {
+    position: absolute; left: calc(50% + 6px); top: -2px;
+    font-family: var(--mono); font-size: 9.5px; color: var(--muted);
+  }
+
+  /* match list */
+  .matches { margin: 6px 0 0; padding: 0; list-style: none; }
+  .matches li {
+    display: flex; gap: 8px; align-items: baseline;
+    font-family: var(--mono); font-size: 11.5px; padding: 3px 0;
+    color: var(--ink-2);
+  }
+  .matches .m-ok { color: var(--good-ink); font-weight: 700; }
+  .matches .m-dark { color: var(--critical-ink); font-weight: 700; }
+
+  /* ---------- table ---------- */
+  .tbl-scroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; min-width: 760px; }
+  th {
+    text-align: left; font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+    font-weight: 600; padding: 8px 12px; border-bottom: 1px solid var(--hairline);
+    white-space: nowrap;
+  }
+  td {
+    padding: 8px 12px; border-bottom: 1px solid var(--grid);
+    font-size: 12.5px; vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--surface-2); }
+  td.mono { font-family: var(--mono); font-size: 12px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  th.num { text-align: right; }
+  .cls-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; vertical-align: 0; }
+  .pill {
+    display: inline-block; font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700;
+    border-radius: 3px; padding: 1px 7px; white-space: nowrap;
+  }
+  .pill-ok { color: var(--good-ink); border: 1px solid currentColor; }
+  .pill-dark { color: var(--critical-ink); border: 1.5px solid currentColor; }
+  .zone-tag { font-size: 11px; color: var(--ink-2); display: inline-block; margin-right: 8px; }
+
+  /* ---------- log ---------- */
+  details.log { margin-bottom: 14px; }
+  details.log summary {
+    cursor: pointer; font-family: var(--mono); font-size: 11px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-2);
+    padding: 10px 16px; background: var(--surface);
+    border: 1px solid var(--hairline); border-radius: 6px;
+    user-select: none;
+  }
+  details.log[open] summary { border-radius: 6px 6px 0 0; }
+  details.log summary:hover { color: var(--ink); }
+  .log-body {
+    background: var(--surface); border: 1px solid var(--hairline); border-top: none;
+    border-radius: 0 0 6px 6px; padding: 12px 16px; overflow-x: auto;
+  }
+  .log-body pre {
+    margin: 0; font-family: var(--mono); font-size: 11px; line-height: 1.75;
+    color: var(--ink-2);
+  }
+  .log-body .hl { color: var(--critical-ink); font-weight: 600; }
+
+  /* ---------- footer ---------- */
+  .foot {
+    font-size: 11.5px; color: var(--muted); border-top: 1px solid var(--hairline);
+    padding-top: 12px; max-width: 90ch;
+  }
+  .foot p { margin: 0 0 4px; }
+
+  /* ---------- tooltip ---------- */
+  .tip {
+    position: fixed; z-index: 10; pointer-events: none; display: none;
+    background: var(--surface); color: var(--ink);
+    border: 1px solid var(--hairline); border-radius: 5px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.18);
+    padding: 8px 10px; font-size: 11.5px; max-width: 240px;
+  }
+  .tip .t-id { font-family: var(--mono); font-weight: 700; font-size: 11px; }
+  .tip .t-row { color: var(--ink-2); font-family: var(--mono); font-size: 10.5px; }
+
+  /* svg text + marks */
+  .map-svg text { font-family: var(--mono); }
+  .tick-label { font-size: 9.5px; fill: var(--muted); }
+  .tile-label { font-size: 9px; fill: var(--muted); opacity: 0.75; }
+  .sea-label { font-size: 12px; fill: var(--muted); font-style: italic; font-family: var(--sans); letter-spacing: 0.04em; }
+  .land-label { font-size: 10px; fill: var(--ink-2); letter-spacing: 0.16em; }
+  .zone-label { font-size: 9.5px; fill: var(--accent-ink); letter-spacing: 0.04em; }
+  .mark-label { font-size: 10px; fill: var(--ink-2); }
+  .mark-label-strong { font-size: 10.5px; font-weight: 700; fill: var(--ink); }
+  .dist-label { font-size: 10px; fill: var(--ink-2); }
+  .hit { cursor: pointer; }
+
+  @keyframes pulse {
+    0% { opacity: 0.55; transform: scale(1); }
+    70% { opacity: 0; transform: scale(2.1); }
+    100% { opacity: 0; transform: scale(2.1); }
+  }
+  .pulse { animation: pulse 2.4s ease-out infinite; transform-origin: center; transform-box: fill-box; }
+  @media (prefers-reduced-motion: reduce) { .pulse { animation: none; opacity: 0.25; } }
+
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+
+<div class="wrap">
+  <header class="masthead">
+    <h1 class="wordmark">TIDEWATCH<span class="tw-dot">·</span>N-PAC</h1>
+    <div class="mission">IUU fishing &amp; transshipment watch — dark trawlers near conservation areas, at-sea catch transfer</div>
+    <div class="meta-chips">
+      <span class="chip">Scene <strong>2026-07-12 18:00Z</strong></span>
+      <span class="chip">Sentinel-1 SAR · <strong>cached</strong></span>
+      <span class="chip">Profile <strong>bering_alaska</strong></span>
+    </div>
+  </header>
+  <p class="subhead">Preliminary · Agents 1–3 (Commander → Detector → Vessel-intel) · handoff: vessel_records_bering.json</p>
+
+  <section class="kpis" aria-label="Sweep summary">
+    <div class="kpi"><span class="k-label">SAR contacts</span><div class="k-value">7</div><div class="k-note">across 9 tiles</div></div>
+    <div class="kpi"><span class="k-label">Clutter dropped</span><div class="k-value">2</div><div class="k-note">below 0.50 confidence</div></div>
+    <div class="kpi"><span class="k-label">Vessels registered</span><div class="k-value">5</div><div class="k-note">on the blackboard</div></div>
+    <div class="kpi"><span class="k-label">AIS matched</span><div class="k-value">4</div><div class="k-note">one-to-one, ≤3 km</div></div>
+    <div class="kpi kpi-critical"><span class="k-label">Dark contacts</span><div class="k-value"><span class="k-glyph">◆</span> 1</div><div class="k-note">inside Pribilof HCA</div></div>
+    <div class="kpi"><span class="k-label">AIS gap</span><div class="k-value">7.0<span style="font-size:16px"> h</span></div><div class="k-note">silent since 15:00Z</div></div>
+  </section>
+
+  <div class="row row-map">
+    <div class="card">
+      <div class="card-head">
+        <span class="card-eyebrow">Common operating picture</span>
+        <h2 class="card-title">Bering Sea &amp; Gulf of Alaska sweep</h2>
+        <span class="card-sub">3×3 tile grid · zones dashed · hover any mark</span>
+      </div>
+      <div class="map-body">
+        <svg id="map" class="map-svg" viewBox="0 0 1000 500" role="img"
+             aria-label="Map of the Bering Sea and Gulf of Alaska showing five vessel detections, AIS tracks, two conservation zones, and one dark contact near the Pribilof Islands"></svg>
+      </div>
+      <div class="legend">
+        <span class="lg"><span class="sw-diamond"></span> dark contact</span>
+        <span class="lg"><span class="sw" style="background:var(--fishing)"></span> fishing</span>
+        <span class="lg"><span class="sw" style="background:var(--reefer)"></span> reefer</span>
+        <span class="lg"><span class="sw" style="background:var(--tanker)"></span> tanker</span>
+        <span class="lg"><span class="sw-line"></span> orphan AIS track (went silent)</span>
+        <span class="lg"><span class="sw-x">×</span> clutter (dropped)</span>
+        <span class="lg"><span class="sw-zone"></span> conservation zone</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <span class="card-eyebrow">Rendezvous detail</span>
+        <h2 class="card-title">Pribilof cluster · tile T01</h2>
+      </div>
+      <div class="card-body">
+        <svg id="inset" class="map-svg" viewBox="0 0 340 252" role="img"
+             aria-label="Zoomed view: the dark 44 metre vessel sits 0.8 kilometres from the broadcasting reefer; the orphan AIS track went silent 1.3 kilometres away"></svg>
+        <p class="inset-note">The 44 m dark hull loiters <strong>0.8 km</strong> off the reefer’s beam — the fishing × reefer pairing this profile watches. The orphan track went silent <strong>1.3 km</strong> away, 3 h before the SAR pass.</p>
+        <span class="zone-chip">entire frame inside Pribilof HCA</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row row-intel">
+    <div>
+      <div class="card dossier">
+        <div class="card-head" style="justify-content:space-between">
+          <div>
+            <span class="card-eyebrow">What the swarm identified</span>
+            <h2 class="card-title" style="font-family:var(--mono)">V-6046d831 — dark fishing vessel</h2>
+          </div>
+          <span class="d-status">◆ Dark · no AIS</span>
+        </div>
+        <div class="card-body">
+          <div class="d-grid">
+            <div class="d-field"><span class="f-label">Class / length</span><span class="f-value">Fishing · 44 m</span></div>
+            <div class="d-field"><span class="f-label">Position (SAR)</span><span class="f-value mono">56.600 N, 169.600 W</span></div>
+            <div class="d-field"><span class="f-label">Detection conf.</span><span class="f-value mono">0.93</span></div>
+            <div class="d-field"><span class="f-label">Probable identity</span><span class="f-value mono">MMSI 273812345</span></div>
+          </div>
+
+          <div class="d-section">
+            <h4>Why we think it’s MMSI 273812345</h4>
+            <p>Orphan-gap correlation: that transponder went silent at <strong>15:00Z</strong> — a 7.0 h gap — with its last fix <strong>1.3 km</strong> from this SAR contact, <strong>inside the Pribilof Islands Habitat Conservation Area</strong>. No other track ends nearby.</p>
+            <p>One-to-one matching mattered here: the nearest live AIS signal (the reefer, 0.97 km) already belongs to another hull. A naive nearest-match would have let it claim this contact and hide it.</p>
+          </div>
+
+          <div class="d-section">
+            <h4>Jurisdiction</h4>
+            <span class="zone-tag">▸ Pribilof Islands Habitat Conservation Area (MPA)</span>
+            <span class="zone-tag">▸ US EEZ (Alaska)</span>
+          </div>
+
+          <div class="d-section">
+            <h4>Open-web intel — You.com</h4>
+            <ul class="snips">
+              <li>Enforcement reporting documents distant-water trawlers shutting off AIS near the US EEZ boundary in the Bering Sea before transferring catch at sea.</li>
+              <li>Observers have flagged reefers loitering near the Pribilof Islands conservation area during the summer pollock season.</li>
+              <li>Vessels associated with this fleet have prior port-state citations for unreported transshipment in the North Pacific.</li>
+            </ul>
+            <ul class="cites">
+              <li>↗ <a href="https://example.org/bering-convention-line-brief">Dark fleet pressure along the Bering Sea Convention Line (watch brief)</a></li>
+              <li>↗ <a href="https://example.org/north-pacific-transshipment">At-sea transshipment in the North Pacific (fisheries intelligence review)</a></li>
+            </ul>
+            <span class="fallback-note">▲ cached fallback — set YDC_API_KEY for live results</span>
+          </div>
+
+          <div class="d-section">
+            <h4>Handoff</h4>
+            <p>Analyst (Agent 4) receives this record for rendezvous scoring: dark fishing vessel + broadcasting reefer, co-located inside an MPA — the profile’s highest-weight pairing.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="agent-rail">
+      <div class="card">
+        <div class="card-head">
+          <span class="agent-num">AGENT 1</span>
+          <h3 class="card-title">Commander — tile &amp; dispatch</h3>
+        </div>
+        <div class="card-body">
+          <div class="agent-note">Tiled <strong>(-180, 50) → (-141, 62)</strong> into 9 tiles, dispatched <strong>6 parallel scouts</strong>. Contacts per tile:</div>
+          <div class="mini-grid" role="img" aria-label="3 by 3 tile grid: T01 two contacts, T11 one, T21 one, T22 one; clutter dropped in T00 and T12">
+            <div class="mg-tile">T02</div><div class="mg-tile mg-clutter">T12<span class="mg-n">×</span></div><div class="mg-tile">T22<span class="mg-n">1</span></div>
+            <div class="mg-tile mg-hit">T01<span class="mg-n">2</span></div><div class="mg-tile">T11<span class="mg-n">1</span></div><div class="mg-tile">T21<span class="mg-n">1</span></div>
+            <div class="mg-tile mg-clutter">T00<span class="mg-n">×</span></div><div class="mg-tile">T10</div><div class="mg-tile">T20</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="agent-num">AGENT 2</span>
+          <h3 class="card-title">Detector — SAR contacts</h3>
+        </div>
+        <div class="card-body">
+          <div class="confbars" role="img" aria-label="Detection confidence per contact; threshold 0.5; two contacts below threshold were dropped as clutter">
+            <div style="position:relative">
+              <div class="cb-row"><span class="cb-label">reefer · T01</span><span class="cb-track"><span class="cb-fill" style="width:97%"></span></span><span class="cb-val">0.97</span></div>
+              <div class="cb-row"><span class="cb-label">tanker · T22</span><span class="cb-track"><span class="cb-fill" style="width:95%"></span></span><span class="cb-val">0.95</span></div>
+              <div class="cb-row"><span class="cb-label">dark hull · T01</span><span class="cb-track"><span class="cb-fill" style="width:93%"></span></span><span class="cb-val">0.93</span></div>
+              <div class="cb-row"><span class="cb-label">trawler · T21</span><span class="cb-track"><span class="cb-fill" style="width:92%"></span></span><span class="cb-val">0.92</span></div>
+              <div class="cb-row"><span class="cb-label">crabber · T11</span><span class="cb-track"><span class="cb-fill" style="width:90%"></span></span><span class="cb-val">0.90</span></div>
+              <div class="cb-row cb-drop"><span class="cb-label">× clutter · T12</span><span class="cb-track"><span class="cb-fill" style="width:41%"></span></span><span class="cb-val">0.41</span></div>
+              <div class="cb-row cb-drop"><span class="cb-label">× clutter · T00</span><span class="cb-track"><span class="cb-fill" style="width:28%"></span></span><span class="cb-val">0.28</span></div>
+              <div class="cb-axis"><span class="cb-thresh"></span><span class="cb-thresh-label">0.50 floor</span></div>
+            </div>
+          </div>
+          <div class="agent-note">Length head powers classification: fishing &lt; 60 m ≤ reefer &lt; 160 m ≤ tanker.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="agent-num">AGENT 3</span>
+          <h3 class="card-title">Vessel-intel — AIS · zones · identity</h3>
+        </div>
+        <div class="card-body">
+          <ul class="matches">
+            <li><span class="m-ok">✓</span> V-5690ee3f ↔ 511200345 · 0.18 km · reefer</li>
+            <li><span class="m-ok">✓</span> V-95aff2ed ↔ 368112233 · 0.00 km · crabber</li>
+            <li><span class="m-ok">✓</span> V-5012e4d2 ↔ 367445566 · 0.00 km · trawler</li>
+            <li><span class="m-ok">✓</span> V-8d4103e5 ↔ 636987654 · 0.00 km · tanker</li>
+            <li><span class="m-dark">◆</span> V-6046d831 · unmatched → DARK</li>
+          </ul>
+          <div class="agent-note"><strong>One-to-one, nearest-first</strong> matching with a 1 h freshness gate — a track that stopped broadcasting can’t claim a hull at scene time. Orphan correlation then recovered the probable identity (MMSI 273812345).</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:14px">
+    <div class="card-head">
+      <span class="card-eyebrow">Blackboard</span>
+      <h2 class="card-title">Registered vessel records</h2>
+      <span class="card-sub">5 records → vessel_records_bering.json</span>
+    </div>
+    <div class="tbl-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Vessel</th><th>Status</th><th>Class</th><th class="num">Length</th>
+            <th>MMSI</th><th>Position</th><th class="num">Conf.</th><th>Zones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="mono">V-6046d831</td>
+            <td><span class="pill pill-dark">◆ dark</span></td>
+            <td><span class="cls-dot" style="background:var(--fishing)"></span>fishing</td>
+            <td class="num">44 m</td>
+            <td class="mono">273812345 <span style="color:var(--muted)">(probable)</span></td>
+            <td class="mono">56.600 N · 169.600 W</td>
+            <td class="num">0.93</td>
+            <td><span class="zone-tag">Pribilof HCA</span><span class="zone-tag">US EEZ</span></td>
+          </tr>
+          <tr>
+            <td class="mono">V-5690ee3f</td>
+            <td><span class="pill pill-ok">✓ matched</span></td>
+            <td><span class="cls-dot" style="background:var(--reefer)"></span>reefer</td>
+            <td class="num">140 m</td>
+            <td class="mono">511200345</td>
+            <td class="mono">56.605 N · 169.590 W</td>
+            <td class="num">0.97</td>
+            <td><span class="zone-tag">Pribilof HCA</span><span class="zone-tag">US EEZ</span></td>
+          </tr>
+          <tr>
+            <td class="mono">V-95aff2ed</td>
+            <td><span class="pill pill-ok">✓ matched</span></td>
+            <td><span class="cls-dot" style="background:var(--fishing)"></span>fishing</td>
+            <td class="num">38 m</td>
+            <td class="mono">368112233</td>
+            <td class="mono">57.800 N · 166.000 W</td>
+            <td class="num">0.90</td>
+            <td><span class="zone-tag">US EEZ</span></td>
+          </tr>
+          <tr>
+            <td class="mono">V-5012e4d2</td>
+            <td><span class="pill pill-ok">✓ matched</span></td>
+            <td><span class="cls-dot" style="background:var(--fishing)"></span>fishing</td>
+            <td class="num">52 m</td>
+            <td class="mono">367445566</td>
+            <td class="mono">57.400 N · 152.300 W</td>
+            <td class="num">0.92</td>
+            <td><span class="zone-tag">Kodiak SSL area</span><span class="zone-tag">US EEZ</span></td>
+          </tr>
+          <tr>
+            <td class="mono">V-8d4103e5</td>
+            <td><span class="pill pill-ok">✓ matched</span></td>
+            <td><span class="cls-dot" style="background:var(--tanker)"></span>tanker</td>
+            <td class="num">183 m</td>
+            <td class="mono">636987654</td>
+            <td class="mono">59.300 N · 145.500 W</td>
+            <td class="num">0.95</td>
+            <td><span class="zone-tag">US EEZ</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <details class="log">
+    <summary>Swarm log · 2026-07-12 sweep (34 lines)</summary>
+    <div class="log-body"><pre>
+[18:00:36] commander: tiled region (-180.0, 50.0, -141.0, 62.0) into 9 tiles (3x3)
+[18:00:36] commander: dispatching 6 scouts across 9 tiles
+[18:00:36] detector[T00]: dropped contact @ (52.40,-175.00) as clutter (conf 0.28 &lt; 0.5)
+[18:00:36] detector[T12]: dropped contact @ (58.90,-155.90) as clutter (conf 0.41 &lt; 0.5)
+[18:00:36] scout[T00]: 0 contact(s)
+[18:00:36] scout[T20]: 0 contact(s)
+[18:00:36] scout[T21]: 1 contact(s)
+[18:00:36] state: registered V-5012e4d2 from sar @ (57.400,-152.300)
+[18:00:36] scout[T01]: 2 contact(s)
+[18:00:36] state: registered V-6046d831 from sar @ (56.600,-169.600)
+[18:00:36] state: registered V-5690ee3f from sar @ (56.605,-169.590)
+[18:00:36] scout[T02]: 0 contact(s)
+[18:00:36] scout[T11]: 1 contact(s)
+[18:00:36] state: registered V-95aff2ed from sar @ (57.800,-166.000)
+[18:00:36] scout[T10]: 0 contact(s)
+[18:00:36] scout[T12]: 0 contact(s)
+[18:00:36] scout[T22]: 1 contact(s)
+[18:00:36] state: registered V-8d4103e5 from sar @ (59.300,-145.500)
+[18:00:36] commander: sweep complete — 5 contacts registered
+[18:00:36] vessel-intel: collected 5 AIS tracks (cached)
+[18:00:36] vessel-intel: V-5012e4d2 ↔ MMSI 367445566 (0.00 km)
+[18:00:36] vessel-intel: V-95aff2ed ↔ MMSI 368112233 (0.00 km)
+[18:00:36] vessel-intel: V-8d4103e5 ↔ MMSI 636987654 (0.00 km)
+[18:00:36] vessel-intel: V-5690ee3f ↔ MMSI 511200345 (0.18 km)
+<span class="hl">[18:00:36] vessel-intel: nearest AIS to V-6046d831 is MMSI 511200345 (0.97 km) but it belongs to another hull — one-to-one matching keeps this contact DARK</span>
+[18:00:36] vessel-intel: V-5012e4d2 class=fishing (52.0 m)
+[18:00:36] vessel-intel: V-6046d831 class=fishing (44.0 m)
+[18:00:36] vessel-intel: V-5690ee3f class=reefer (140.0 m)
+[18:00:36] vessel-intel: V-95aff2ed class=fishing (38.0 m)
+[18:00:36] vessel-intel: V-8d4103e5 class=tanker (183.0 m)
+[18:00:36] vessel-intel: orphan track MMSI 273812345 went silent 2026-07-12T15:00:00 at (56.59,-169.62) (7.0 h of silence)
+<span class="hl">[18:00:36] vessel-intel: correlated dark contact V-6046d831 ↔ MMSI 273812345 — went dark 1.3 km away inside Pribilof Islands Habitat Conservation Area</span>
+[18:00:36] vessel-intel: V-6046d831 zones=['Pribilof Islands Habitat Conservation Area', 'US EEZ (Alaska)']
+[18:00:36] vessel-intel: You.com enrichment for V-6046d831 (cached fallback — set YDC_API_KEY for live)
+</pre></div>
+  </details>
+
+  <footer class="foot">
+    <p><strong>Preliminary dashboard — Agents 1–3 only.</strong> Rendezvous scoring and the threat narrative land with the Analyst &amp; Reporter (Person B), which consume vessel_records_bering.json.</p>
+    <p>Cached demo scenario (--mode cached). Coastline and zone boundaries are schematic bounding boxes — swap for Marine Regions / WDPA polygons in the live build. All sources public and vessel-focused: AIS safety broadcasts, Sentinel-1 open imagery.</p>
+  </footer>
+</div>
+
+<div class="tip" id="tip"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ------------------------------------------------------------------ data
+  const VESSELS = [
+    { id: "V-6046d831", cls: "fishing", len: 44, lat: 56.6, lon: -169.6, conf: 0.93,
+      dark: true, mmsi: "273812345 (probable)", zones: "Pribilof HCA · US EEZ" },
+    { id: "V-5690ee3f", cls: "reefer", len: 140, lat: 56.605, lon: -169.59, conf: 0.97,
+      mmsi: "511200345", zones: "Pribilof HCA · US EEZ" },
+    { id: "V-95aff2ed", cls: "fishing", len: 38, lat: 57.8, lon: -166.0, conf: 0.90,
+      mmsi: "368112233", zones: "US EEZ" },
+    { id: "V-5012e4d2", cls: "fishing", len: 52, lat: 57.4, lon: -152.3, conf: 0.92,
+      mmsi: "367445566", zones: "Kodiak SSL area · US EEZ" },
+    { id: "V-8d4103e5", cls: "tanker", len: 183, lat: 59.3, lon: -145.5, conf: 0.95,
+      mmsi: "636987654", zones: "US EEZ" },
+  ];
+  const hourlyTrack = (lat0, lon0, dlat, dlon, n) =>
+    Array.from({ length: n }, (_, i) => [lat0 + dlat * i, lon0 + dlon * i]);
+  const TRACKS = [
+    { cls: "reefer", pts: hourlyTrack(56.605, -169.59, 0, 0.0005, 11) },
+    { cls: "fishing", pts: hourlyTrack(57.8, -166.03, 0, 0.005, 11) },
+    { cls: "fishing", pts: hourlyTrack(57.43, -152.3, -0.005, 0, 11) },
+    { cls: "tanker", pts: hourlyTrack(59.0, -146.1, 0.05, 0.1, 11) },
+  ];
+  const ORPHAN = { mmsi: "273812345", pts: hourlyTrack(56.62, -169.72, -0.005, 0.02, 6) };
+  const CLUTTER = [
+    { lat: 52.4, lon: -175.0, conf: 0.28 },
+    { lat: 58.9, lon: -155.9, conf: 0.41 },
+  ];
+  const ZONES = [
+    { name: "Pribilof Islands HCA", bbox: [-172, 55.5, -168, 58], lx: -171.8, ly: 57.85 },
+    { name: "Steller sea lion area", bbox: [-156, 56, -150.5, 59], lx: -155.8, ly: 56.25 },
+  ];
+  // schematic coastline (coarse; disclaimer in footer)
+  const MAINLAND = [
+    [-165, 62.6], [-164.6, 61.4], [-165.6, 60.8], [-164.8, 60.3], [-162.3, 59.8],
+    [-161.9, 58.7], [-158.7, 58.95], [-157.5, 58.3], [-158.4, 57.5], [-160.4, 56.4],
+    [-162.8, 55.3], [-164.6, 54.6], [-163.3, 55.15], [-161.2, 55.8], [-159, 56.75],
+    [-156.6, 57.2], [-155.6, 57.75], [-154, 58.9], [-152.6, 59.9], [-151.6, 60.7],
+    [-150.6, 61.2], [-149.2, 60.95], [-148.2, 60.75], [-146.6, 60.7], [-145.2, 60.35],
+    [-143.4, 60.0], [-141, 59.85], [-141, 62.6],
+  ];
+  const ISLANDS = [
+    [[-154.4, 57.35], [-154.1, 57.75], [-153.3, 58.05], [-152.35, 57.95], [-152.1, 57.45], [-152.9, 56.95], [-153.9, 57.0]],  // Kodiak
+    [[-167.3, 60.2], [-166.5, 60.45], [-165.8, 60.25], [-166.2, 59.9], [-167.0, 59.95]],                                       // Nunivak
+    [[-173.0, 60.5], [-172.5, 60.65], [-172.3, 60.5], [-172.8, 60.35]],                                                        // St. Matthew
+    [[-167.2, 53.7], [-166.4, 54.0], [-165.7, 54.2], [-166.3, 53.5]],                                                          // Unalaska
+  ];
+  const ALEUTIAN_DOTS = [[-168.9, 53.0], [-170.7, 52.6], [-172.6, 52.2], [-174.4, 52.1], [-176.4, 51.9], [-178.3, 51.8]];
+  const ST_PAUL = [-170.28, 57.18];
+
+  const NS = "http://www.w3.org/2000/svg";
+  const el = (parent, name, attrs) => {
+    const node = document.createElementNS(NS, name);
+    for (const k in attrs) node.setAttribute(k, attrs[k]);
+    parent.appendChild(node);
+    return node;
+  };
+  const txt = (parent, x, y, cls, s, anchor) => {
+    const t = el(parent, "text", { x, y, "class": cls });
+    if (anchor) t.setAttribute("text-anchor", anchor);
+    t.textContent = s;
+    return t;
+  };
+  const fmtPos = (lat, lon) =>
+    Math.abs(lat).toFixed(3) + " N, " + Math.abs(lon).toFixed(3) + " W";
+
+  // --------------------------------------------------------------- tooltip
+  const tip = document.getElementById("tip");
+  function bindTip(node, html) {
+    node.classList.add("hit");
+    node.addEventListener("mousemove", (e) => {
+      tip.innerHTML = html;
+      tip.style.display = "block";
+      const w = tip.offsetWidth, h = tip.offsetHeight;
+      let x = e.clientX + 14, y = e.clientY + 14;
+      if (x + w > innerWidth - 8) x = e.clientX - w - 14;
+      if (y + h > innerHeight - 8) y = e.clientY - h - 14;
+      tip.style.left = x + "px";
+      tip.style.top = y + "px";
+    });
+    node.addEventListener("mouseleave", () => { tip.style.display = "none"; });
+  }
+  const vesselTip = (v) =>
+    '<div class="t-id">' + v.id + (v.dark ? " · ◆ DARK" : " · ✓ matched") + "</div>" +
+    '<div class="t-row">' + v.cls + " · " + v.len + " m · conf " + v.conf.toFixed(2) + "</div>" +
+    '<div class="t-row">MMSI ' + v.mmsi + "</div>" +
+    '<div class="t-row">' + fmtPos(v.lat, v.lon) + "</div>" +
+    '<div class="t-row">' + v.zones + "</div>";
+
+  // ------------------------------------------------------------- mark draw
+  const clsVar = (c) => "var(--" + c + ")";
+  function drawVessel(g, v, X, Y, r) {
+    const x = X(v.lon), y = Y(v.lat);
+    if (v.dark) {
+      const d = r + 3.5;
+      el(g, "rect", { x: x - d, y: y - d, width: 2 * d, height: 2 * d,
+        transform: "rotate(45 " + x + " " + y + ")", fill: "var(--critical)",
+        "class": "pulse", opacity: 0.4 });
+      const m = el(g, "rect", { x: x - r, y: y - r, width: 2 * r, height: 2 * r,
+        transform: "rotate(45 " + x + " " + y + ")", fill: "var(--critical)",
+        stroke: "var(--surface)", "stroke-width": 2 });
+      bindTip(m, vesselTip(v));
+      return m;
+    }
+    const m = el(g, "circle", { cx: x, cy: y, r: r - 1, fill: clsVar(v.cls),
+      stroke: "var(--surface)", "stroke-width": 2 });
+    bindTip(m, vesselTip(v));
+    return m;
+  }
+  const lineOf = (g, pts, X, Y, attrs) => {
+    attrs.points = pts.map((p) => X(p[1]) + "," + Y(p[0])).join(" ");
+    return el(g, "polyline", attrs);
+  };
+
+  // ------------------------------------------------------------- main map
+  (function mainMap() {
+    const svg = document.getElementById("map");
+    const M = { l: 10, r: 10, t: 8, b: 24 };
+    const W = 1000 - M.l - M.r, H = 500 - M.t - M.b;
+    const LON0 = -180, LON1 = -141, LAT0 = 50, LAT1 = 62;
+    const X = (lon) => M.l + ((lon - LON0) / (LON1 - LON0)) * W;
+    const Y = (lat) => M.t + ((LAT1 - lat) / (LAT1 - LAT0)) * H;
+
+    const clip = el(svg, "clipPath", { id: "plot" });
+    el(clip, "rect", { x: M.l, y: M.t, width: W, height: H, rx: 4 });
+    el(svg, "rect", { x: M.l, y: M.t, width: W, height: H, rx: 4,
+      fill: "var(--surface-2)", stroke: "var(--hairline)" });
+    const plot = el(svg, "g", { "clip-path": "url(#plot)" });
+
+    // graticule
+    const grat = el(plot, "g", {});
+    for (let lon = -175; lon <= -145; lon += 5)
+      el(grat, "line", { x1: X(lon), y1: M.t, x2: X(lon), y2: M.t + H,
+        stroke: "var(--grid)", "stroke-width": 1 });
+    for (let lat = 52; lat <= 60; lat += 2)
+      el(grat, "line", { x1: M.l, y1: Y(lat), x2: M.l + W, y2: Y(lat),
+        stroke: "var(--grid)", "stroke-width": 1 });
+
+    // zones (under land)
+    for (const z of ZONES) {
+      const [a, b, c, d] = z.bbox;
+      el(plot, "rect", { x: X(a), y: Y(d), width: X(c) - X(a), height: Y(b) - Y(d),
+        fill: "var(--zone)", stroke: "var(--zone-edge)", "stroke-width": 1.2,
+        "stroke-dasharray": "5 4" });
+      txt(plot, X(z.lx), Y(z.ly) + 3, "zone-label", z.name);
+    }
+
+    // land (points are [lon, lat])
+    const landAttrs = { fill: "var(--land)", stroke: "var(--land-edge)",
+      "stroke-width": 1, "stroke-linejoin": "round" };
+    for (const shape of [MAINLAND].concat(ISLANDS)) {
+      const poly = el(plot, "polygon", Object.assign({}, landAttrs));
+      poly.setAttribute("points", shape.map((p) => X(p[0]) + "," + Y(p[1])).join(" "));
+    }
+    for (const d of ALEUTIAN_DOTS)
+      el(plot, "circle", { cx: X(d[0]), cy: Y(d[1]), r: 2.2, fill: "var(--land)",
+        stroke: "var(--land-edge)", "stroke-width": 0.8 });
+    el(plot, "circle", { cx: X(ST_PAUL[0]), cy: Y(ST_PAUL[1]), r: 2.6,
+      fill: "var(--land)", stroke: "var(--land-edge)", "stroke-width": 0.8 });
+
+    // place labels
+    txt(plot, X(-152), Y(61.5), "land-label", "A L A S K A");
+    txt(plot, X(-174.5), Y(55.2), "sea-label", "Bering Sea");
+    txt(plot, X(-149.5), Y(54.8), "sea-label", "Gulf of Alaska");
+    txt(plot, X(-170.2), Y(57.55), "tick-label", "St. Paul I.", "middle");
+    txt(plot, X(-176.5), Y(51.2), "tick-label", "Aleutian Is.");
+
+    // tile grid
+    for (const lon of [-167, -154])
+      el(plot, "line", { x1: X(lon), y1: M.t, x2: X(lon), y2: M.t + H,
+        stroke: "var(--hairline)", "stroke-dasharray": "2 5" });
+    for (const lat of [54, 58])
+      el(plot, "line", { x1: M.l, y1: Y(lat), x2: M.l + W, y2: Y(lat),
+        stroke: "var(--hairline)", "stroke-dasharray": "2 5" });
+    for (let col = 0; col < 3; col++)
+      for (let row = 0; row < 3; row++)
+        txt(plot, X(-180 + 13 * col) + 6, Y(50 + 4 * row) - 6, "tile-label",
+          "T" + col + row);
+
+    // axis ticks
+    for (let lon = -175; lon <= -145; lon += 10)
+      txt(svg, X(lon), M.t + H + 15, "tick-label", Math.abs(lon) + "°W", "middle");
+    for (let lat = 52; lat <= 60; lat += 4)
+      txt(plot, M.l + W - 6, Y(lat) - 4, "tick-label", lat + "°N", "end");
+
+    // AIS tracks
+    for (const tr of TRACKS) {
+      lineOf(plot, tr.pts, (lon) => X(lon), (lat) => Y(lat), {
+        fill: "none", stroke: clsVar(tr.cls), "stroke-width": 2,
+        opacity: 0.75, "stroke-linecap": "round" });
+      const last = tr.pts[tr.pts.length - 1];
+      el(plot, "circle", { cx: X(last[1]), cy: Y(last[0]), r: 2.4,
+        fill: clsVar(tr.cls) });
+    }
+    // orphan track
+    lineOf(plot, ORPHAN.pts, (lon) => X(lon), (lat) => Y(lat), {
+      fill: "none", stroke: "var(--warn)", "stroke-width": 2,
+      "stroke-dasharray": "4 3", "stroke-linecap": "round" });
+
+    // clutter
+    for (const c of CLUTTER) {
+      const g = el(plot, "g", { stroke: "var(--muted)", "stroke-width": 1.6 });
+      const x = X(c.lon), y = Y(c.lat), s = 4;
+      el(g, "line", { x1: x - s, y1: y - s, x2: x + s, y2: y + s });
+      el(g, "line", { x1: x - s, y1: y + s, x2: x + s, y2: y - s });
+      el(g, "circle", { cx: x, cy: y, r: 9, fill: "transparent", stroke: "none" });
+      bindTip(g, '<div class="t-id">clutter — dropped</div>' +
+        '<div class="t-row">conf ' + c.conf.toFixed(2) + " &lt; 0.50 floor</div>" +
+        '<div class="t-row">' + fmtPos(c.lat, c.lon) + "</div>");
+      txt(plot, x + 8, y + 3, "tick-label", c.conf.toFixed(2));
+    }
+
+    // vessels + direct labels
+    const LBL = {
+      "V-95aff2ed": [8, -8, "368112233 · 38 m"],
+      "V-5012e4d2": [9, 14, "367445566 · 52 m"],
+      "V-8d4103e5": [9, -8, "636987654 · 183 m"],
+    };
+    for (const v of VESSELS) {
+      drawVessel(plot, v, X, Y, v.dark ? 6 : 5.5);
+      const l = LBL[v.id];
+      if (l) txt(plot, X(v.lon) + l[0], Y(v.lat) + l[1], "mark-label", l[2]);
+    }
+    // cluster callout
+    txt(plot, X(-169.6) + 12, Y(56.6) + 4, "mark-label-strong",
+      "◆ dark hull + reefer — see detail →");
+  })();
+
+  // ---------------------------------------------------------------- inset
+  (function inset() {
+    const svg = document.getElementById("inset");
+    const M = { l: 8, r: 8, t: 8, b: 30 };
+    const W = 340 - M.l - M.r, H = 252 - M.t - M.b;
+    const LON0 = -169.755, LON1 = -169.535, LAT0 = 56.568, LAT1 = 56.648;
+    const X = (lon) => M.l + ((lon - LON0) / (LON1 - LON0)) * W;
+    const Y = (lat) => M.t + ((LAT1 - lat) / (LAT1 - LAT0)) * H;
+
+    el(svg, "rect", { x: M.l, y: M.t, width: W, height: H, rx: 4,
+      fill: "var(--zone)", stroke: "var(--zone-edge)", "stroke-width": 1,
+      "stroke-dasharray": "5 4" });
+
+    const dark = VESSELS[0], reefer = VESSELS[1];
+    const oLast = ORPHAN.pts[ORPHAN.pts.length - 1];
+
+    // separation + correlation lines (under marks)
+    el(svg, "line", { x1: X(oLast[1]), y1: Y(oLast[0]), x2: X(dark.lon), y2: Y(dark.lat),
+      stroke: "var(--warn)", "stroke-width": 1.4, "stroke-dasharray": "3 3" });
+    el(svg, "line", { x1: X(dark.lon), y1: Y(dark.lat), x2: X(reefer.lon), y2: Y(reefer.lat),
+      stroke: "var(--muted)", "stroke-width": 1.2, "stroke-dasharray": "2 3" });
+
+    // orphan track
+    lineOf(svg, ORPHAN.pts, (lon) => X(lon), (lat) => Y(lat), {
+      fill: "none", stroke: "var(--warn)", "stroke-width": 2.2,
+      "stroke-dasharray": "5 4", "stroke-linecap": "round" });
+    const ox = X(oLast[1]), oy = Y(oLast[0]);
+    const og = el(svg, "g", { stroke: "var(--warn)", "stroke-width": 2 });
+    el(og, "line", { x1: ox - 4.5, y1: oy - 4.5, x2: ox + 4.5, y2: oy + 4.5 });
+    el(og, "line", { x1: ox - 4.5, y1: oy + 4.5, x2: ox + 4.5, y2: oy - 4.5 });
+    el(og, "circle", { cx: ox, cy: oy, r: 10, fill: "transparent", stroke: "none" });
+    bindTip(og, '<div class="t-id">MMSI 273812345 — last AIS fix</div>' +
+      '<div class="t-row">went silent 15:00Z · 7.0 h gap</div>' +
+      '<div class="t-row">inside Pribilof HCA</div>');
+    txt(svg, ox, oy + 20, "mark-label", "went silent 15:00Z", "middle");
+    txt(svg, X(-169.72) - 2, Y(56.62) - 10, "tick-label", "track 10:00Z →");
+
+    // reefer drift track
+    lineOf(svg, TRACKS[0].pts, (lon) => X(lon), (lat) => Y(lat), {
+      fill: "none", stroke: "var(--reefer)", "stroke-width": 2.2,
+      opacity: 0.8, "stroke-linecap": "round" });
+
+    // marks
+    drawVessel(svg, dark, X, Y, 8);
+    drawVessel(svg, reefer, X, Y, 7);
+    txt(svg, X(dark.lon) - 12, Y(dark.lat) + 4, "mark-label-strong", "◆ 44 m dark hull", "end");
+    txt(svg, X(reefer.lon) - 2, Y(reefer.lat) - 14, "mark-label", "reefer 511200345 · 140 m", "end");
+
+    // distance labels
+    txt(svg, (X(oLast[1]) + X(dark.lon)) / 2 - 6, (Y(oLast[0]) + Y(dark.lat)) / 2 - 6,
+      "dist-label", "1.3 km", "end");
+    txt(svg, (X(dark.lon) + X(reefer.lon)) / 2 + 12, (Y(dark.lat) + Y(reefer.lat)) / 2 + 2,
+      "dist-label", "0.8 km");
+
+    // scale bar: 2 km in lon degrees at 56.6N ≈ 2 / (111.32*cos56.6) = 0.0327°
+    const km2 = X(LON0 + 0.0327) - X(LON0);
+    const sy = M.t + H - 12, sx = M.l + 10;
+    el(svg, "line", { x1: sx, y1: sy, x2: sx + km2, y2: sy,
+      stroke: "var(--ink-2)", "stroke-width": 1.5 });
+    el(svg, "line", { x1: sx, y1: sy - 3, x2: sx, y2: sy + 3, stroke: "var(--ink-2)", "stroke-width": 1.5 });
+    el(svg, "line", { x1: sx + km2, y1: sy - 3, x2: sx + km2, y2: sy + 3, stroke: "var(--ink-2)", "stroke-width": 1.5 });
+    txt(svg, sx + km2 / 2, sy - 6, "tick-label", "2 km", "middle");
+    txt(svg, M.l + W, M.t + H + 16, "tick-label", "56.57–56.65°N · 169.54–169.75°W", "end");
+  })();
+})();
+</script>
