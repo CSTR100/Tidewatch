@@ -59,9 +59,11 @@ CACHED_CONTACTS = {
     ],
     "bering_alaska": [
         # the dark hull — no AIS, loitering inside the Pribilof HCA
-        dict(lat=56.6, lon=-169.6, confidence=0.93, length_m=44.0),
+        # (south of St. George Island: the real EEZ polygon excludes the
+        # island's landmass, so contacts must sit in actual water)
+        dict(lat=56.30, lon=-169.60, confidence=0.93, length_m=44.0),
         # the reefer 800 m away — the transshipment partner
-        dict(lat=56.605, lon=-169.59, confidence=0.97, length_m=140.0),
+        dict(lat=56.305, lon=-169.59, confidence=0.97, length_m=140.0),
         # broadcasting crabber on the Bering shelf
         dict(lat=57.8, lon=-166.0, confidence=0.90, length_m=38.0),
         # broadcasting trawler in the Kodiak SSL protection area
@@ -97,7 +99,7 @@ CACHED_AIS = {
     ],
     "bering_alaska": [
         # reefer loitering by the Pribilofs (flag of convenience)
-        {"mmsi": "511200345", "points": _hourly(56.605, -169.59, 0.0, 0.0005, 12, 11, day="2026-07-12")},
+        {"mmsi": "511200345", "points": _hourly(56.305, -169.59, 0.0, 0.0005, 12, 11, day="2026-07-12")},
         # crabber working the shelf
         {"mmsi": "368112233", "points": _hourly(57.8, -166.03, 0.0, 0.005, 12, 11, day="2026-07-12")},
         # trawler off Kodiak
@@ -105,7 +107,7 @@ CACHED_AIS = {
         # tanker northeast-bound across the Gulf
         {"mmsi": "636987654", "points": _hourly(59.0, -146.1, 0.05, 0.1, 12, 11, day="2026-07-12")},
         # goes dark at 15:00 inside the Pribilof HCA, 1.3 km from the dark hull
-        {"mmsi": "273812345", "points": _hourly(56.62, -169.72, -0.005, 0.02, 10, 6, day="2026-07-12")},
+        {"mmsi": "273812345", "points": _hourly(56.32, -169.72, -0.005, 0.02, 10, 6, day="2026-07-12")},
     ],
 }
 

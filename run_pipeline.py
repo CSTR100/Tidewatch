@@ -18,7 +18,7 @@ import os
 sys.path.insert(0, os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "agents"))
 
-from profiles import PROFILES
+from profiles import PROFILES, hydrate_real_zones
 from agents.commander import Commander
 from agents.detector import Detector
 from agents.vessel_intel import VesselIntel
@@ -33,6 +33,13 @@ def main():
     args = ap.parse_args()
 
     profile = PROFILES[args.profile]
+
+    # Task 3: attach real EEZ/MPA polygons where a source exists for the
+    # region. Safe offline — zones keep their bbox fallback if a load fails.
+    eez_regions = {"bering_alaska": "us_alaska"}
+    if args.profile in eez_regions:
+        hydrate_real_zones(profile, eez_region=eez_regions[args.profile])
+
     print(f"\n=== TIDEWATCH · mission: {profile.description} ===\n")
 
     # Agent 1 — Commander: tile + dispatch
