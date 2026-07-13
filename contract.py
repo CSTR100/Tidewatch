@@ -54,6 +54,8 @@ class VesselRecord:
     ais_matched: Optional[bool] = None      # None = not yet checked
     is_dark: Optional[bool] = None          # detected but not broadcasting
     mmsi: Optional[str] = None              # AIS identity if matched
+    name: Optional[str] = None              # AIS-broadcast vessel name (or
+                                            # probable name via gap correlation)
     vessel_class: Optional[str] = None      # "fishing" | "reefer" | "tanker" | "other"
     track: list[TrackPoint] = field(default_factory=list)
     ais_gaps: list[AISGap] = field(default_factory=list)

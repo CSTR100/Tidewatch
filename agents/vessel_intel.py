@@ -56,6 +56,15 @@ def _classify(length_m: float | None) -> str:
 
 
 def _zone_contains(zone: Zone, lat: float, lon: float) -> bool:
+    # Real boundary first (Task 3): if the zone carries a polygon, use precise
+    # point-in-polygon. Fall back to the bbox test when no polygon is set.
+    poly = getattr(zone, "polygon", None)
+    if poly is not None:
+        try:
+            from shapely.geometry import Point
+            return bool(poly.contains(Point(lon, lat)))
+        except Exception:
+            pass  # shapely missing / bad geom -> fall through to bbox
     min_lon, min_lat, max_lon, max_lat = zone.bbox
     return min_lon <= lon <= max_lon and min_lat <= lat <= max_lat
 
@@ -143,6 +152,7 @@ class VesselIntel:
             rec.ais_matched = True
             rec.is_dark = False
             rec.mmsi = tr["mmsi"]
+            rec.name = tr.get("name")
             assigned[rec.vessel_id] = tr
             taken_mmsi.add(tr["mmsi"])
             state.log(f"vessel-intel: {rec.vessel_id} ↔ MMSI {tr['mmsi']} ({d:.2f} km)")
@@ -219,6 +229,7 @@ class VesselIntel:
                 continue
             d, tr, lat, lon, ts, silent_h = best
             rec.mmsi = tr["mmsi"]
+            rec.name = tr.get("name")  # probable identity, via the gap
             rec.ais_gaps.append(AISGap(
                 start=ts,
                 end=watch_end.isoformat(),

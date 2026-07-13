@@ -64,16 +64,25 @@ Person A:
       cache the detections.
 - [ ] `VesselIntel._collect_aisstream`: AISstream.io WebSocket subscription
       for the bbox; persist buffers to `data/`.
-- [ ] Replace bbox zones with real polygons (Marine Regions EEZ + WDPA MPA
-      shapefiles, shapely `contains`).
+- [x] Replace bbox zones with real polygons (Marine Regions EEZ + NOAA Alaska
+      habitat-restriction MPAs, shapely `contains`; both keyless, fetched once
+      and cached to `data/`). Protected Planet's API is deprecated — NOAA's
+      ArcGIS service is the MPA source now.
 - [ ] Build the `conflict_zone` cached scenario (mirror the fishing one).
 - [ ] (Stretch) SAM mask extraction per detection → `mask_ref`.
 
 Person B:
-- [ ] Analyst: rendezvous detection over `vessel_records.json` (pair-class
-      proximity + loiter), threat scoring, Bedrock narration.
-- [ ] Reporter: Leaflet map + dossier (feed `identity.citations` from
+- [x] Analyst: rendezvous detection over `vessel_records.json` (pair-class
+      proximity + loiter), threat scoring, Bedrock narration
+      (`TIDEWATCH_BEDROCK_MODEL` for live; template fallback otherwise).
+- [x] Reporter: Leaflet map + dossier (feed `identity.citations` from
       You.com into the dossier's sources section).
+
+Run Person B's half after the pipeline:
+
+```bash
+python run_analysis.py --profile bering_alaska   # → report.html + analyzed records
+```
 
 ## Legal/framing note
 

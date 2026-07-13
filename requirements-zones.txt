@@ -1,0 +1,2 @@
+# Real EEZ/MPA zone polygons (Task 3). Install where zone stamping runs.
+shapely>=2.0

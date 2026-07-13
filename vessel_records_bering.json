@@ -1,256 +1,6 @@
 [
   {
-    "vessel_id": "V-5012e4d2",
-    "detection": {
-      "tile_id": "T21",
-      "lat": 57.4,
-      "lon": -152.3,
-      "timestamp": "2026-07-12T18:00:00",
-      "source": "sar",
-      "confidence": 0.92,
-      "length_m": 52.0,
-      "mask_ref": null
-    },
-    "ais_matched": true,
-    "is_dark": false,
-    "mmsi": "367445566",
-    "vessel_class": "fishing",
-    "track": [
-      {
-        "lat": 57.43,
-        "lon": -152.3,
-        "timestamp": "2026-07-12T12:00:00",
-        "source": "ais"
-      },
-      {
-        "lat": 57.425,
-        "lon": -152.3,
-        "timestamp": "2026-07-12T13:00:00",
-        "source": "ais"
-      },
-      {
-        "lat": 57.42,
-        "lon": -152.3,
-        "timestamp": "2026-07-12T14:00:00",
-        "source": "ais"
-      },
-      {
-        "lat": 57.415,
-        "lon": -152.3,
-        "timestamp": "2026-07-12T15:00:00",
-        "source": "ais"
-      },
-      {
-        "lat": 57.41,
-        "lon": -152.3,
-        "timestamp": "2026-07-12T16:00:00",
-        "source": "ais"
-      },
-      {
-        "lat": 57.405,
-        "lon": -152.3,
-        "timestamp": "2026-07-12T17:00:00",
-        "source": "ais"
-      },
-      {
-        "lat": 57.4,
-        "lon": -152.3,
-        "timestamp": "2026-07-12T18:00:00",
-        "source": "ais"
-      },
-      {
-        "lat": 57.395,
-        "lon": -152.3,
-        "timestamp": "2026-07-12T19:00:00",
-        "source": "ais"
-      },
-      {
-        "lat": 57.39,
-        "lon": -152.3,
-        "timestamp": "2026-07-12T20:00:00",
-        "source": "ais"
-      },
-      {
-        "lat": 57.385,
-        "lon": -152.3,
-        "timestamp": "2026-07-12T21:00:00",
-        "source": "ais"
-      },
-      {
-        "lat": 57.38,
-        "lon": -152.3,
-        "timestamp": "2026-07-12T22:00:00",
-        "source": "ais"
-      }
-    ],
-    "ais_gaps": [],
-    "zones": [
-      "Steller sea lion protection area (Kodiak)",
-      "US EEZ (Alaska)"
-    ],
-    "identity": null,
-    "threat_score": null,
-    "threat_narrative": null,
-    "rendezvous_with": null
-  },
-  {
-    "vessel_id": "V-6046d831",
-    "detection": {
-      "tile_id": "T01",
-      "lat": 56.6,
-      "lon": -169.6,
-      "timestamp": "2026-07-12T18:00:00",
-      "source": "sar",
-      "confidence": 0.93,
-      "length_m": 44.0,
-      "mask_ref": null
-    },
-    "ais_matched": false,
-    "is_dark": true,
-    "mmsi": "273812345",
-    "vessel_class": "fishing",
-    "track": [
-      {
-        "lat": 56.6,
-        "lon": -169.6,
-        "timestamp": "2026-07-12T18:00:00",
-        "source": "sar"
-      }
-    ],
-    "ais_gaps": [
-      {
-        "start": "2026-07-12T15:00:00",
-        "end": "2026-07-12T22:00:00",
-        "duration_hours": 7.0,
-        "last_known": [
-          56.595,
-          -169.62
-        ],
-        "inside_zone": "Pribilof Islands Habitat Conservation Area"
-      }
-    ],
-    "zones": [
-      "Pribilof Islands Habitat Conservation Area",
-      "US EEZ (Alaska)"
-    ],
-    "identity": {
-      "summary_snippets": [
-        "Enforcement reporting documents distant-water trawlers shutting off AIS near the US EEZ boundary in the Bering Sea before transferring catch at sea.",
-        "Observers have flagged reefers loitering near the Pribilof Islands conservation area during the summer pollock season.",
-        "Vessels associated with this fleet have prior port-state citations for unreported transshipment in the North Pacific."
-      ],
-      "citations": [
-        {
-          "title": "Dark fleet pressure along the Bering Sea Convention Line (watch brief)",
-          "url": "https://example.org/bering-convention-line-brief"
-        },
-        {
-          "title": "At-sea transshipment in the North Pacific (fisheries intelligence review)",
-          "url": "https://example.org/north-pacific-transshipment"
-        }
-      ],
-      "note": "cached fallback -- replace with live You.com API results when YDC_API_KEY is set"
-    },
-    "threat_score": null,
-    "threat_narrative": null,
-    "rendezvous_with": null
-  },
-  {
-    "vessel_id": "V-5690ee3f",
-    "detection": {
-      "tile_id": "T01",
-      "lat": 56.605,
-      "lon": -169.59,
-      "timestamp": "2026-07-12T18:00:00",
-      "source": "sar",
-      "confidence": 0.97,
-      "length_m": 140.0,
-      "mask_ref": null
-    },
-    "ais_matched": true,
-    "is_dark": false,
-    "mmsi": "511200345",
-    "vessel_class": "reefer",
-    "track": [
-      {
-        "lat": 56.605,
-        "lon": -169.59,
-        "timestamp": "2026-07-12T12:00:00",
-        "source": "ais"
-      },
-      {
-        "lat": 56.605,
-        "lon": -169.58950000000002,
-        "timestamp": "2026-07-12T13:00:00",
-        "source": "ais"
-      },
-      {
-        "lat": 56.605,
-        "lon": -169.589,
-        "timestamp": "2026-07-12T14:00:00",
-        "source": "ais"
-      },
-      {
-        "lat": 56.605,
-        "lon": -169.5885,
-        "timestamp": "2026-07-12T15:00:00",
-        "source": "ais"
-      },
-      {
-        "lat": 56.605,
-        "lon": -169.588,
-        "timestamp": "2026-07-12T16:00:00",
-        "source": "ais"
-      },
-      {
-        "lat": 56.605,
-        "lon": -169.5875,
-        "timestamp": "2026-07-12T17:00:00",
-        "source": "ais"
-      },
-      {
-        "lat": 56.605,
-        "lon": -169.58700000000002,
-        "timestamp": "2026-07-12T18:00:00",
-        "source": "ais"
-      },
-      {
-        "lat": 56.605,
-        "lon": -169.5865,
-        "timestamp": "2026-07-12T19:00:00",
-        "source": "ais"
-      },
-      {
-        "lat": 56.605,
-        "lon": -169.586,
-        "timestamp": "2026-07-12T20:00:00",
-        "source": "ais"
-      },
-      {
-        "lat": 56.605,
-        "lon": -169.5855,
-        "timestamp": "2026-07-12T21:00:00",
-        "source": "ais"
-      },
-      {
-        "lat": 56.605,
-        "lon": -169.585,
-        "timestamp": "2026-07-12T22:00:00",
-        "source": "ais"
-      }
-    ],
-    "ais_gaps": [],
-    "zones": [
-      "Pribilof Islands Habitat Conservation Area",
-      "US EEZ (Alaska)"
-    ],
-    "identity": null,
-    "threat_score": null,
-    "threat_narrative": null,
-    "rendezvous_with": null
-  },
-  {
-    "vessel_id": "V-95aff2ed",
+    "vessel_id": "V-30986a47",
     "detection": {
       "tile_id": "T11",
       "lat": 57.8,
@@ -264,6 +14,7 @@
     "ais_matched": true,
     "is_dark": false,
     "mmsi": "368112233",
+    "name": "\u6d51\u6c34\u6478\u9c7c\u53f7 (HUNSHUI MOYU)",
     "vessel_class": "fishing",
     "track": [
       {
@@ -338,12 +89,265 @@
       "US EEZ (Alaska)"
     ],
     "identity": null,
-    "threat_score": null,
-    "threat_narrative": null,
+    "threat_score": 0,
+    "threat_narrative": "Routine contact: 38.0 m fishing vessel detected by SAR at (57.80, -166.00) on 2026-07-12T18:00:00; zones: US EEZ (Alaska). No suspicious behavior for the 'bering_alaska' watch.",
     "rendezvous_with": null
   },
   {
-    "vessel_id": "V-8d4103e5",
+    "vessel_id": "V-0683636e",
+    "detection": {
+      "tile_id": "T01",
+      "lat": 56.7,
+      "lon": -169.6,
+      "timestamp": "2026-07-12T18:00:00",
+      "source": "sar",
+      "confidence": 0.93,
+      "length_m": 44.0,
+      "mask_ref": null
+    },
+    "ais_matched": false,
+    "is_dark": true,
+    "mmsi": "273812345",
+    "name": "\u0411\u0410\u0411\u0410-\u042f\u0413\u0410 (BABA YAGA)",
+    "vessel_class": "fishing",
+    "track": [
+      {
+        "lat": 56.7,
+        "lon": -169.6,
+        "timestamp": "2026-07-12T18:00:00",
+        "source": "sar"
+      }
+    ],
+    "ais_gaps": [
+      {
+        "start": "2026-07-12T15:00:00",
+        "end": "2026-07-12T22:00:00",
+        "duration_hours": 7.0,
+        "last_known": [
+          56.695,
+          -169.62
+        ],
+        "inside_zone": "Pribilof Islands Habitat Conservation Area"
+      }
+    ],
+    "zones": [
+      "Pribilof Islands Habitat Conservation Area",
+      "US EEZ (Alaska)"
+    ],
+    "identity": {
+      "summary_snippets": [
+        "Enforcement reporting documents distant-water trawlers shutting off AIS near the US EEZ boundary in the Bering Sea before transferring catch at sea.",
+        "Observers have flagged reefers loitering near the Pribilof Islands conservation area during the summer pollock season.",
+        "Vessels associated with this fleet have prior port-state citations for unreported transshipment in the North Pacific."
+      ],
+      "citations": [
+        {
+          "title": "Dark fleet pressure along the Bering Sea Convention Line (watch brief)",
+          "url": "https://example.org/bering-convention-line-brief"
+        },
+        {
+          "title": "At-sea transshipment in the North Pacific (fisheries intelligence review)",
+          "url": "https://example.org/north-pacific-transshipment"
+        }
+      ],
+      "note": "cached fallback -- replace with live You.com API results when YDC_API_KEY is set"
+    },
+    "threat_score": 1.0,
+    "threat_narrative": "SUSPICIOUS (dark_while_detected, rendezvous_dark_pair, ais_gap_in_zone, loitering_in_mpa): 44.0 m fishing vessel detected by SAR at (56.70, -169.60) on 2026-07-12T18:00:00; zones: Pribilof Islands Habitat Conservation Area, US EEZ (Alaska); no AIS broadcast (dark) \u2014 probable identity MMSI 273812345; AIS silent 7.0 h since 2026-07-12T15:00:00 inside Pribilof Islands Habitat Conservation Area; loitering alongside V-74f5a03c (pattern consistent with at-sea transshipment); open-web intel: Enforcement reporting documents distant-water trawlers shutting off AIS near the US EEZ boundary in the Bering Sea before transferring catch at sea.; open-web intel: Observers have flagged reefers loitering near the Pribilof Islands conservation area during the summer pollock season.. Recommend tasking follow-up collection and notifying enforcement.",
+    "rendezvous_with": "V-74f5a03c"
+  },
+  {
+    "vessel_id": "V-74f5a03c",
+    "detection": {
+      "tile_id": "T01",
+      "lat": 56.705,
+      "lon": -169.59,
+      "timestamp": "2026-07-12T18:00:00",
+      "source": "sar",
+      "confidence": 0.97,
+      "length_m": 140.0,
+      "mask_ref": null
+    },
+    "ais_matched": true,
+    "is_dark": false,
+    "mmsi": "511200345",
+    "name": "\u987a\u624b\u7275\u9c7c\u53f7 (SHUNSHOU QIANYU)",
+    "vessel_class": "reefer",
+    "track": [
+      {
+        "lat": 56.705,
+        "lon": -169.59,
+        "timestamp": "2026-07-12T12:00:00",
+        "source": "ais"
+      },
+      {
+        "lat": 56.705,
+        "lon": -169.58950000000002,
+        "timestamp": "2026-07-12T13:00:00",
+        "source": "ais"
+      },
+      {
+        "lat": 56.705,
+        "lon": -169.589,
+        "timestamp": "2026-07-12T14:00:00",
+        "source": "ais"
+      },
+      {
+        "lat": 56.705,
+        "lon": -169.5885,
+        "timestamp": "2026-07-12T15:00:00",
+        "source": "ais"
+      },
+      {
+        "lat": 56.705,
+        "lon": -169.588,
+        "timestamp": "2026-07-12T16:00:00",
+        "source": "ais"
+      },
+      {
+        "lat": 56.705,
+        "lon": -169.5875,
+        "timestamp": "2026-07-12T17:00:00",
+        "source": "ais"
+      },
+      {
+        "lat": 56.705,
+        "lon": -169.58700000000002,
+        "timestamp": "2026-07-12T18:00:00",
+        "source": "ais"
+      },
+      {
+        "lat": 56.705,
+        "lon": -169.5865,
+        "timestamp": "2026-07-12T19:00:00",
+        "source": "ais"
+      },
+      {
+        "lat": 56.705,
+        "lon": -169.586,
+        "timestamp": "2026-07-12T20:00:00",
+        "source": "ais"
+      },
+      {
+        "lat": 56.705,
+        "lon": -169.5855,
+        "timestamp": "2026-07-12T21:00:00",
+        "source": "ais"
+      },
+      {
+        "lat": 56.705,
+        "lon": -169.585,
+        "timestamp": "2026-07-12T22:00:00",
+        "source": "ais"
+      }
+    ],
+    "ais_gaps": [],
+    "zones": [
+      "Pribilof Islands Habitat Conservation Area",
+      "US EEZ (Alaska)"
+    ],
+    "identity": null,
+    "threat_score": 0.45,
+    "threat_narrative": "SUSPICIOUS (rendezvous_dark_pair, loitering_in_mpa): 140.0 m reefer vessel detected by SAR at (56.70, -169.59) on 2026-07-12T18:00:00; zones: Pribilof Islands Habitat Conservation Area, US EEZ (Alaska); loitering alongside V-0683636e (pattern consistent with at-sea transshipment). Recommend tasking follow-up collection and notifying enforcement.",
+    "rendezvous_with": "V-0683636e"
+  },
+  {
+    "vessel_id": "V-fe8a860d",
+    "detection": {
+      "tile_id": "T22",
+      "lat": 58.14,
+      "lon": -151.9,
+      "timestamp": "2026-07-12T18:00:00",
+      "source": "sar",
+      "confidence": 0.92,
+      "length_m": 52.0,
+      "mask_ref": null
+    },
+    "ais_matched": true,
+    "is_dark": false,
+    "mmsi": "367445566",
+    "name": "\u0410\u0412\u041e\u0421\u042c (AVOS')",
+    "vessel_class": "fishing",
+    "track": [
+      {
+        "lat": 58.17,
+        "lon": -151.9,
+        "timestamp": "2026-07-12T12:00:00",
+        "source": "ais"
+      },
+      {
+        "lat": 58.165,
+        "lon": -151.9,
+        "timestamp": "2026-07-12T13:00:00",
+        "source": "ais"
+      },
+      {
+        "lat": 58.160000000000004,
+        "lon": -151.9,
+        "timestamp": "2026-07-12T14:00:00",
+        "source": "ais"
+      },
+      {
+        "lat": 58.155,
+        "lon": -151.9,
+        "timestamp": "2026-07-12T15:00:00",
+        "source": "ais"
+      },
+      {
+        "lat": 58.15,
+        "lon": -151.9,
+        "timestamp": "2026-07-12T16:00:00",
+        "source": "ais"
+      },
+      {
+        "lat": 58.145,
+        "lon": -151.9,
+        "timestamp": "2026-07-12T17:00:00",
+        "source": "ais"
+      },
+      {
+        "lat": 58.14,
+        "lon": -151.9,
+        "timestamp": "2026-07-12T18:00:00",
+        "source": "ais"
+      },
+      {
+        "lat": 58.135000000000005,
+        "lon": -151.9,
+        "timestamp": "2026-07-12T19:00:00",
+        "source": "ais"
+      },
+      {
+        "lat": 58.13,
+        "lon": -151.9,
+        "timestamp": "2026-07-12T20:00:00",
+        "source": "ais"
+      },
+      {
+        "lat": 58.125,
+        "lon": -151.9,
+        "timestamp": "2026-07-12T21:00:00",
+        "source": "ais"
+      },
+      {
+        "lat": 58.120000000000005,
+        "lon": -151.9,
+        "timestamp": "2026-07-12T22:00:00",
+        "source": "ais"
+      }
+    ],
+    "ais_gaps": [],
+    "zones": [
+      "Steller sea lion protection area (Kodiak)",
+      "US EEZ (Alaska)"
+    ],
+    "identity": null,
+    "threat_score": 0.15,
+    "threat_narrative": "SUSPICIOUS (loitering_in_mpa): 52.0 m fishing vessel detected by SAR at (58.14, -151.90) on 2026-07-12T18:00:00; zones: Steller sea lion protection area (Kodiak), US EEZ (Alaska). Recommend tasking follow-up collection and notifying enforcement.",
+    "rendezvous_with": null
+  },
+  {
+    "vessel_id": "V-c7aafe88",
     "detection": {
       "tile_id": "T22",
       "lat": 59.3,
@@ -357,6 +361,7 @@
     "ais_matched": true,
     "is_dark": false,
     "mmsi": "636987654",
+    "name": null,
     "vessel_class": "tanker",
     "track": [
       {
@@ -431,8 +436,8 @@
       "US EEZ (Alaska)"
     ],
     "identity": null,
-    "threat_score": null,
-    "threat_narrative": null,
+    "threat_score": 0,
+    "threat_narrative": "Routine contact: 183.0 m tanker vessel detected by SAR at (59.30, -145.50) on 2026-07-12T18:00:00; zones: US EEZ (Alaska). No suspicious behavior for the 'bering_alaska' watch.",
     "rendezvous_with": null
   }
 ]
