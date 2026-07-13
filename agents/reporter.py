@@ -101,10 +101,32 @@ _TEMPLATE = """<!DOCTYPE html>
   .srcs a { color:var(--accent); }
   footer { padding:14px 24px 28px; color:var(--muted); font-size:12.5px;
            text-align:center; }
+  .pdf-btn { float:right; margin-top:-2px; font:600 13px system-ui;
+             color:#e6edf3; background:var(--accent); border:none;
+             border-radius:7px; padding:7px 14px; cursor:pointer; }
+  .pdf-btn:hover { filter:brightness(1.1); }
+
+  /* --- print / PDF: dossier only, clean pages, full source URLs --- */
+  @media print {
+    #map, .legend, .pdf-btn, footer { display:none; }
+    body { background:#fff; }
+    header { background:#fff; color:#16232e; padding:0 0 12px;
+             border-bottom:2px solid #16232e; }
+    header p { color:#4c5f6e; }
+    main { padding:16px 0; max-width:none; }
+    .card { break-inside:avoid; border:1px solid #bbb; box-shadow:none; }
+    .card.dark-vessel { border-left:4px solid #d03b3b; }
+    .srcs a::after { content:" (" attr(href) ")"; font-size:11px;
+                     word-break:break-all; }
+  }
 </style>
 </head>
 <body>
-<header><h1>Tidewatch — Mission Report</h1><p id="mission"></p></header>
+<header>
+  <button class="pdf-btn" onclick="window.print()"
+          title="Uses your browser's Save as PDF">Download dossier (PDF)</button>
+  <h1>Tidewatch — Mission Report</h1><p id="mission"></p>
+</header>
 <div id="map"></div>
 <div class="legend" id="legend"></div>
 <main id="dossiers"></main>
