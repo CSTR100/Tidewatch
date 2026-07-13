@@ -96,13 +96,25 @@ class VesselIntel:
         return tracks
 
     def _collect_aisstream(self, state: SwarmState) -> list[dict]:
-        # prep-week TODO: AISstream.io WebSocket subscription for the profile
-        # bbox; persist buffers to data/ so live runs become cached fallbacks.
-        state.log(
-            "vessel-intel: AISstream live mode not wired yet — "
-            "falling back to cached buffers"
-        )
-        return CACHED_AIS[self.scenario]
+        # Live AIS collection (see agents/aisstream_collector.py): AISstream.io
+        # WebSocket subscription for the profile bbox -> buffered PositionReports
+        # per MMSI -> cached to data/ -> tracks in this pipeline's shape.
+        # Safety: any failure (no API key, network error) falls back to the
+        # cached buffers, so the pipeline never stalls.
+        try:
+            from .aisstream_collector import collect_ais, load_cached
+            profile_id = getattr(self, "scenario", "default")
+            bbox = getattr(getattr(self, "profile", None), "region_bbox", None)
+            if bbox is None:
+                cached = load_cached(profile_id)
+                return cached if cached is not None else CACHED_AIS[self.scenario]
+            return collect_ais(profile_id, tuple(bbox))
+        except Exception as exc:  # noqa: BLE001 - deliberate graceful fallback
+            state.log(
+                f"vessel-intel: AISstream live collection unavailable ({exc}); "
+                f"falling back to cached buffers"
+            )
+            return CACHED_AIS[self.scenario]
 
     # -------------------------------------------------------------- matching
     def _match_one_to_one(self, state: SwarmState, tracks: list[dict]) -> dict:
