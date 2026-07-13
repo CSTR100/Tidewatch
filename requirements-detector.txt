@@ -1,0 +1,7 @@
+# Live xView3 detector backend (Task 1). Install on the GPU box that runs
+# mode="xview3"; the sandbox/cached path needs none of these.
+pystac-client>=0.9
+rasterio>=1.4
+scipy>=1.15
+numpy>=1.23
+torch>=1.9        # GPU strongly recommended; ~12 min/scene on GPU per repo

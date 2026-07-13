@@ -137,29 +137,30 @@ def _pick_scene(bbox: tuple[float, float, float, float]) -> Optional[Any]:
 
 def _infer_xview3(scene: Any, bbox: tuple[float, float, float, float]) -> list[dict]:
     """
-    Run the xView3 first-place checkpoint over the scene's VV/VH assets,
-    cropped to bbox, and return raw contact dicts:
-        {lat, lon, confidence, length_m}
-    Wire DIUx-xView/xView3_first_place here. Requires the checkpoint path in
-    TIDEWATCH_XVIEW3_CKPT and its runtime deps (torch, rasterio, the repo's
-    inference entrypoint). Until then, live mode fails loudly instead of
-    inventing detections.
+    Run the xView3 first-place traced ensemble over the scene's VV/VH assets
+    and return raw contact dicts: {lat, lon, confidence, length_m}.
+
+    Delegates to xview3_infer.infer_scene, which implements the winning
+    solution's documented pipeline (2-ch SAR sigmoid norm -> 2048px tiles
+    step 1536 -> traced ensemble + flip-LR TTA -> CenterNet NMS -> pixel->geo).
+    Requires torch + rasterio + the traced_ensemble.jit checkpoint
+    (TIDEWATCH_XVIEW3_CKPT). No GPU present -> runs on CPU (slow) but works.
     """
-    ckpt = os.environ.get("TIDEWATCH_XVIEW3_CKPT")
-    if not ckpt:
-        raise RuntimeError(
-            "xView3 checkpoint not configured. Set TIDEWATCH_XVIEW3_CKPT to the "
-            "DIUx-xView/xView3_first_place checkpoint to enable live inference. "
-            "(STAC scene selection + caching are already working.)"
-        )
-    # --- integration point (Person A, checkpoint day) ---
-    # 1. read scene.assets['vv'].href / ['vh'].href with rasterio (COG windows)
-    # 2. window-read the bbox, tile to the model's input size
-    # 3. run the CircleNet ensemble, collect (row,col,conf,length_px)
-    # 4. convert pixel coords -> lat/lon via the COG transform
-    raise NotImplementedError(
-        "Connect DIUx-xView/xView3_first_place inference here."
-    )
+    vv = scene.assets["vv"].href
+    vh = scene.assets["vh"].href
+    from .xview3_infer import infer_scene  # heavy deps imported lazily inside
+    raw = infer_scene(vv, vh, bbox=bbox)
+    # keep only vessels for the Detector; classification carries downstream
+    return [
+        {
+            "lat": d["lat"],
+            "lon": d["lon"],
+            "confidence": d["confidence"],
+            "length_m": d["length_m"],
+        }
+        for d in raw
+        if d.get("is_vessel", True)
+    ]
 
 
 def run_xview3(tile) -> list["Detection"]:
