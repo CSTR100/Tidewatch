@@ -8,8 +8,8 @@ Enriches every registered contact on the blackboard:
   3. tracks + orphan-gap correlation (an AIS track that went silent near a
      dark contact is that contact's probable identity)
   4. jurisdiction stamping against the profile's zones
-  5. You.com open-web enrichment for dark contacts (cached fallback when
-     YDC_API_KEY is unset)
+  5. open-web enrichment for dark contacts — You.com (YDC_API_KEY) or
+     Tavily (TAVILY_API_KEY), cached fallback when no key is set
 """
 
 from __future__ import annotations
@@ -30,6 +30,7 @@ MATCH_RADIUS_KM = 3.0    # AIS fix must be this close at scene time to match
 MATCH_MAX_STALE_H = 1.0  # ...and this fresh; a silent track can't claim a hull
 ORPHAN_RADIUS_KM = 15.0  # dark contact ↔ silent track correlation radius
 YDC_ENDPOINT = "https://api.ydc-index.io/search"
+TAVILY_ENDPOINT = "https://api.tavily.com/search"
 
 
 def _parse(ts: str) -> datetime:
@@ -254,47 +255,90 @@ class VesselIntel:
             )
 
     # ------------------------------------------------------------ enrichment
+    # Providers are tried in order until one has a key and succeeds; the
+    # cached scenario is the terminal fallback so the swarm never stalls.
+    # You.com stays first (sponsor prize); Tavily is the drop-in alternate.
     def _enrich(self, state: SwarmState) -> None:
         for rec in state.dark_vessels():
-            rec.identity = self._youcom_lookup(rec, state)
+            rec.identity = self._open_web_intel(rec, state)
 
-    def _youcom_lookup(self, rec: VesselRecord, state: SwarmState) -> dict:
-        api_key = os.environ.get("YDC_API_KEY")
-        if not api_key:
-            state.log(
-                f"vessel-intel: You.com enrichment for {rec.vessel_id} "
-                f"(cached fallback — set YDC_API_KEY for live)"
-            )
-            return CACHED_ENRICHMENT[self.scenario]
-
+    def _open_web_intel(self, rec: VesselRecord, state: SwarmState) -> dict:
         query = (
             f"MMSI {rec.mmsi} dark vessel AIS gap {self.profile.description}"
             if rec.mmsi else
             f"dark {rec.vessel_class} vessel {self.profile.description}"
         )
-        try:
-            req = urllib.request.Request(
-                f"{YDC_ENDPOINT}?{urllib.parse.urlencode({'query': query})}",
-                headers={"X-API-Key": api_key},
-            )
-            with urllib.request.urlopen(req, timeout=15) as resp:
-                hits = json.load(resp).get("hits", [])[:4]
-            identity = {
-                "summary_snippets": [
-                    s for h in hits for s in h.get("snippets", [])[:1]
-                ][:3],
-                "citations": [
-                    {"title": h.get("title"), "url": h.get("url")} for h in hits
-                ],
-                "note": "live You.com search results",
-            }
-            state.log(
-                f"vessel-intel: You.com enrichment for {rec.vessel_id} "
-                f"(live, {len(hits)} citations)"
-            )
-            return identity
-        except Exception as exc:  # noqa: BLE001 — demo insurance: never stall the swarm
-            state.log(
-                f"vessel-intel: You.com live call failed ({exc}) — cached fallback"
-            )
-            return CACHED_ENRICHMENT[self.scenario]
+        providers = [
+            ("You.com", "YDC_API_KEY", self._youcom_search),
+            ("Tavily", "TAVILY_API_KEY", self._tavily_search),
+        ]
+        tried_any = False
+        for name, env_var, search in providers:
+            api_key = os.environ.get(env_var)
+            if not api_key:
+                continue
+            tried_any = True
+            try:
+                identity = search(query, api_key)
+                state.log(
+                    f"vessel-intel: {name} enrichment for {rec.vessel_id} "
+                    f"(live, {len(identity['citations'])} citations)"
+                )
+                return identity
+            except Exception as exc:  # noqa: BLE001 — demo insurance: never stall the swarm
+                state.log(
+                    f"vessel-intel: {name} live call failed ({exc}) — "
+                    f"trying next provider"
+                )
+        state.log(
+            f"vessel-intel: open-web enrichment for {rec.vessel_id} "
+            + ("(all live providers failed — cached fallback)" if tried_any else
+               "(cached fallback — set YDC_API_KEY or TAVILY_API_KEY for live)")
+        )
+        return CACHED_ENRICHMENT[self.scenario]
+
+    def _youcom_search(self, query: str, api_key: str) -> dict:
+        req = urllib.request.Request(
+            f"{YDC_ENDPOINT}?{urllib.parse.urlencode({'query': query})}",
+            headers={"X-API-Key": api_key},
+        )
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            hits = json.load(resp).get("hits", [])[:4]
+        return {
+            "summary_snippets": [
+                s for h in hits for s in h.get("snippets", [])[:1]
+            ][:3],
+            "citations": [
+                {"title": h.get("title"), "url": h.get("url")} for h in hits
+            ],
+            "note": "live You.com search results",
+        }
+
+    def _tavily_search(self, query: str, api_key: str) -> dict:
+        req = urllib.request.Request(
+            TAVILY_ENDPOINT,
+            data=json.dumps({
+                "query": query,
+                "search_depth": "basic",
+                "include_answer": True,
+                "max_results": 4,
+            }).encode(),
+            headers={
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json",
+            },
+        )
+        with urllib.request.urlopen(req, timeout=20) as resp:
+            data = json.load(resp)
+        results = data.get("results", [])[:4]
+        snippets = [data["answer"]] if data.get("answer") else []
+        snippets += [
+            r["content"][:280] for r in results if r.get("content")
+        ]
+        return {
+            "summary_snippets": snippets[:3],
+            "citations": [
+                {"title": r.get("title"), "url": r.get("url")} for r in results
+            ],
+            "note": "live Tavily search results",
+        }
