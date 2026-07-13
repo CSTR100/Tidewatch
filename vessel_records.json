@@ -1,6 +1,150 @@
 [
   {
-    "vessel_id": "V-72035ebb",
+    "vessel_id": "V-ddc4ba0f",
+    "detection": {
+      "tile_id": "T11",
+      "lat": -12.42,
+      "lon": -80.51,
+      "timestamp": "2026-07-10T10:00:00",
+      "source": "sar",
+      "confidence": 0.94,
+      "length_m": 38.0,
+      "mask_ref": null
+    },
+    "ais_matched": false,
+    "is_dark": true,
+    "mmsi": "760123456",
+    "vessel_class": "fishing",
+    "track": [
+      {
+        "lat": -12.42,
+        "lon": -80.51,
+        "timestamp": "2026-07-10T10:00:00",
+        "source": "sar"
+      }
+    ],
+    "ais_gaps": [
+      {
+        "start": "2026-07-10T07:00:00",
+        "end": "2026-07-10T14:00:00",
+        "duration_hours": 7.0,
+        "last_known": [
+          -12.4,
+          -80.53
+        ],
+        "inside_zone": "Demo MPA (Nazca ridge)"
+      }
+    ],
+    "zones": [
+      "Demo MPA (Nazca ridge)",
+      "Peru EEZ (edge)"
+    ],
+    "identity": {
+      "summary_snippets": [
+        "Regional reporting documents a distant-water fishing fleet operating near the Peruvian EEZ with repeated transponder shutoffs.",
+        "NGO trackers have linked reefers loitering along the EEZ edge to at-sea transshipment of unreported catch.",
+        "Port-state inspections previously cited vessels from this fleet for unreported catch transfers."
+      ],
+      "citations": [
+        {
+          "title": "Dark fleet activity off South America (tracker report)",
+          "url": "https://example.org/dark-fleet-report"
+        },
+        {
+          "title": "Transshipment patterns near EEZ boundaries",
+          "url": "https://example.org/transshipment-study"
+        }
+      ],
+      "note": "cached fallback -- replace with live You.com API results when YDC_API_KEY is set"
+    },
+    "threat_score": null,
+    "threat_narrative": null,
+    "rendezvous_with": null
+  },
+  {
+    "vessel_id": "V-83e09f56",
+    "detection": {
+      "tile_id": "T11",
+      "lat": -12.44,
+      "lon": -80.49,
+      "timestamp": "2026-07-10T10:00:00",
+      "source": "sar",
+      "confidence": 0.97,
+      "length_m": 128.0,
+      "mask_ref": null
+    },
+    "ais_matched": true,
+    "is_dark": false,
+    "mmsi": "351987000",
+    "vessel_class": "reefer",
+    "track": [
+      {
+        "lat": -12.44,
+        "lon": -80.49,
+        "timestamp": "2026-07-10T06:00:00",
+        "source": "ais"
+      },
+      {
+        "lat": -12.439,
+        "lon": -80.49,
+        "timestamp": "2026-07-10T07:00:00",
+        "source": "ais"
+      },
+      {
+        "lat": -12.437999999999999,
+        "lon": -80.49,
+        "timestamp": "2026-07-10T08:00:00",
+        "source": "ais"
+      },
+      {
+        "lat": -12.437,
+        "lon": -80.49,
+        "timestamp": "2026-07-10T09:00:00",
+        "source": "ais"
+      },
+      {
+        "lat": -12.436,
+        "lon": -80.49,
+        "timestamp": "2026-07-10T10:00:00",
+        "source": "ais"
+      },
+      {
+        "lat": -12.434999999999999,
+        "lon": -80.49,
+        "timestamp": "2026-07-10T11:00:00",
+        "source": "ais"
+      },
+      {
+        "lat": -12.434,
+        "lon": -80.49,
+        "timestamp": "2026-07-10T12:00:00",
+        "source": "ais"
+      },
+      {
+        "lat": -12.433,
+        "lon": -80.49,
+        "timestamp": "2026-07-10T13:00:00",
+        "source": "ais"
+      },
+      {
+        "lat": -12.432,
+        "lon": -80.49,
+        "timestamp": "2026-07-10T14:00:00",
+        "source": "ais"
+      }
+    ],
+    "ais_gaps": [],
+    "zones": [
+      "Demo MPA (Nazca ridge)",
+      "Peru EEZ (edge)"
+    ],
+    "identity": null,
+    "threat_score": null,
+    "threat_narrative": null,
+    "rendezvous_with": null
+  },
+  {
+    "vessel_id": "V-d503df79",
     "detection": {
       "tile_id": "T02",
       "lat": -10.2,
@@ -81,7 +225,7 @@
     "rendezvous_with": null
   },
   {
-    "vessel_id": "V-912957d7",
+    "vessel_id": "V-e3bd1ad2",
     "detection": {
       "tile_id": "T20",
       "lat": -14.06,
@@ -154,150 +298,6 @@
     ],
     "ais_gaps": [],
     "zones": [
-      "Peru EEZ (edge)"
-    ],
-    "identity": null,
-    "threat_score": null,
-    "threat_narrative": null,
-    "rendezvous_with": null
-  },
-  {
-    "vessel_id": "V-2bea8b28",
-    "detection": {
-      "tile_id": "T11",
-      "lat": -12.42,
-      "lon": -80.51,
-      "timestamp": "2026-07-10T10:00:00",
-      "source": "sar",
-      "confidence": 0.94,
-      "length_m": 38.0,
-      "mask_ref": null
-    },
-    "ais_matched": false,
-    "is_dark": true,
-    "mmsi": "760123456",
-    "vessel_class": "fishing",
-    "track": [
-      {
-        "lat": -12.42,
-        "lon": -80.51,
-        "timestamp": "2026-07-10T10:00:00",
-        "source": "sar"
-      }
-    ],
-    "ais_gaps": [
-      {
-        "start": "2026-07-10T07:00:00",
-        "end": "2026-07-10T14:00:00",
-        "duration_hours": 7.0,
-        "last_known": [
-          -12.4,
-          -80.53
-        ],
-        "inside_zone": "Demo MPA (Nazca ridge)"
-      }
-    ],
-    "zones": [
-      "Demo MPA (Nazca ridge)",
-      "Peru EEZ (edge)"
-    ],
-    "identity": {
-      "summary_snippets": [
-        "Regional reporting documents a distant-water fishing fleet operating near the Peruvian EEZ with repeated transponder shutoffs.",
-        "NGO trackers have linked reefers loitering along the EEZ edge to at-sea transshipment of unreported catch.",
-        "Port-state inspections previously cited vessels from this fleet for unreported catch transfers."
-      ],
-      "citations": [
-        {
-          "title": "Dark fleet activity off South America (tracker report)",
-          "url": "https://example.org/dark-fleet-report"
-        },
-        {
-          "title": "Transshipment patterns near EEZ boundaries",
-          "url": "https://example.org/transshipment-study"
-        }
-      ],
-      "note": "cached fallback -- replace with live You.com API results when YDC_API_KEY is set"
-    },
-    "threat_score": null,
-    "threat_narrative": null,
-    "rendezvous_with": null
-  },
-  {
-    "vessel_id": "V-d266f8b8",
-    "detection": {
-      "tile_id": "T11",
-      "lat": -12.44,
-      "lon": -80.49,
-      "timestamp": "2026-07-10T10:00:00",
-      "source": "sar",
-      "confidence": 0.97,
-      "length_m": 128.0,
-      "mask_ref": null
-    },
-    "ais_matched": true,
-    "is_dark": false,
-    "mmsi": "351987000",
-    "vessel_class": "reefer",
-    "track": [
-      {
-        "lat": -12.44,
-        "lon": -80.49,
-        "timestamp": "2026-07-10T06:00:00",
-        "source": "ais"
-      },
-      {
-        "lat": -12.439,
-        "lon": -80.49,
-        "timestamp": "2026-07-10T07:00:00",
-        "source": "ais"
-      },
-      {
-        "lat": -12.437999999999999,
-        "lon": -80.49,
-        "timestamp": "2026-07-10T08:00:00",
-        "source": "ais"
-      },
-      {
-        "lat": -12.437,
-        "lon": -80.49,
-        "timestamp": "2026-07-10T09:00:00",
-        "source": "ais"
-      },
-      {
-        "lat": -12.436,
-        "lon": -80.49,
-        "timestamp": "2026-07-10T10:00:00",
-        "source": "ais"
-      },
-      {
-        "lat": -12.434999999999999,
-        "lon": -80.49,
-        "timestamp": "2026-07-10T11:00:00",
-        "source": "ais"
-      },
-      {
-        "lat": -12.434,
-        "lon": -80.49,
-        "timestamp": "2026-07-10T12:00:00",
-        "source": "ais"
-      },
-      {
-        "lat": -12.433,
-        "lon": -80.49,
-        "timestamp": "2026-07-10T13:00:00",
-        "source": "ais"
-      },
-      {
-        "lat": -12.432,
-        "lon": -80.49,
-        "timestamp": "2026-07-10T14:00:00",
-        "source": "ais"
-      }
-    ],
-    "ais_gaps": [],
-    "zones": [
-      "Demo MPA (Nazca ridge)",
       "Peru EEZ (edge)"
     ],
     "identity": null,
