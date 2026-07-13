@@ -70,10 +70,17 @@ Person A:
 - [ ] (Stretch) SAM mask extraction per detection → `mask_ref`.
 
 Person B:
-- [ ] Analyst: rendezvous detection over `vessel_records.json` (pair-class
-      proximity + loiter), threat scoring, Bedrock narration.
-- [ ] Reporter: Leaflet map + dossier (feed `identity.citations` from
+- [x] Analyst: rendezvous detection over `vessel_records.json` (pair-class
+      proximity + loiter), threat scoring, Bedrock narration
+      (`TIDEWATCH_BEDROCK_MODEL` for live; template fallback otherwise).
+- [x] Reporter: Leaflet map + dossier (feed `identity.citations` from
       You.com into the dossier's sources section).
+
+Run Person B's half after the pipeline:
+
+```bash
+python run_analysis.py --profile bering_alaska   # → report.html + analyzed records
+```
 
 ## Legal/framing note
 
