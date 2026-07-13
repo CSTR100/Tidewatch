@@ -20,7 +20,7 @@ registers the Tavily MCP server for Claude Code sessions in this repo
 
 ## What the demo run shows
 
-1. **Commander** tiles the Peru region into 9 tiles and dispatches 6 parallel
+1. **Commander** tiles the Alaska and Bering Sea region into 9 tiles and dispatches 6 parallel
    scouts (the visible swarm moment).
 2. **Detector** finds 5 SAR contacts, drops 1 as clutter, registers 4.
 3. **Vessel-intel**:
